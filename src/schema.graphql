@@ -1,0 +1,479 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateAuthInput {
+  contact: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+  role: Role
+}
+
+input CreateNaApplicantInput {
+  contact: String
+  firstName: String!
+  lastName: String!
+  relation: String
+  signature_url: String
+}
+
+input CreateNaFeeInput {
+  amount: String!
+  bank_name: String
+  bank_ref_no: String
+  invoice_no: String
+  is_paid: Boolean
+  na_formId: Int!
+  order_id: String
+  payment_mode: PaymentMode!
+  payment_type: PaymentType!
+  track_id: String
+  transaction_date: DateTime
+  transaction_id: String
+}
+
+input CreateNaInput {
+  anx1: String
+  anx2: String
+  anx3: String
+  anx4: String
+  anx5: String
+  applicants: [CreateNaApplicantInput!]
+  q1: Boolean!
+  q2: String
+  q3: String
+  q4: String
+  q5: String
+  q6: String
+  q7: String
+  q8: String
+  q9: String
+  q10: String
+  q11: String
+  q12: String
+  q13: String
+  q14: String
+  q15: String
+  q16: String
+  q17: String
+  q18: String
+  surveys: [CreateNaSurveyInput!]
+  villageId: Int!
+}
+
+input CreateNaQueryInput {
+  createdById: Int!
+  from_userId: Int!
+  na_formId: Int!
+  query: String!
+  query_status: QueryStatus!
+  request_type: RequestType!
+  to_userId: Int!
+  type: QueryType!
+  upload_url_1: String
+  upload_url_2: String
+  upload_url_3: String
+  upload_url_4: String
+  upload_url_5: String
+}
+
+input CreateNaSurveyInput {
+  area: String!
+  sub_division: String!
+  survey_no: String!
+  villageId: Int!
+}
+
+input CreateNaUploadInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""The status of the fees"""
+enum FeesStatus {
+  ACTIVE
+  DUE
+  INACTIVE
+  PAID
+}
+
+input LoginAuthInput {
+  contact: String!
+  password: String!
+}
+
+type Mutation {
+  createNa(createNaInput: CreateNaInput!): Na!
+  createNaApplicant(createNaApplicantInput: CreateNaApplicantInput!): NaApplicant!
+  createNaFee(createNaFeeInput: CreateNaFeeInput!): NaFee!
+  createNaQuery(createNaQueryInput: CreateNaQueryInput!): NaQuery!
+  createNaSurvey(createNaSurveyInput: CreateNaSurveyInput!): NaSurvey!
+  createNaUpload(createNaUploadInput: CreateNaUploadInput!): NaUpload!
+  registerUser(createAuthInput: CreateAuthInput!): User!
+  removeNaApplicant(id: Int!): NaApplicant!
+  removeNaFee(id: Int!): NaFee!
+  removeNaSurvey(id: Int!): NaSurvey!
+  removeNaUpload(id: Int!): NaUpload!
+  updateNa(updateNaInput: UpdateNaInput!): Na!
+  updateNaApplicant(updateNaApplicantInput: UpdateNaApplicantInput!): NaApplicant!
+  updateNaFee(updateNaFeeInput: UpdateNaFeeInput!): NaFee!
+  updateNaSurvey(updateNaSurveyInput: UpdateNaSurveyInput!): NaSurvey!
+  updateNaUpload(updateNaUploadInput: UpdateNaUploadInput!): NaUpload!
+}
+
+type Na {
+  anx1: String
+  anx2: String
+  anx3: String
+  anx4: String
+  anx5: String
+  createdAt: DateTime!
+  createdBy: User
+  createdById: Int
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  dept_user_id: User!
+  id: Int!
+  na_applicant: [NaApplicant!]
+  na_survey: [NaSurvey!]
+  q1: Boolean!
+  q2: String
+  q3: String
+  q4: String
+  q5: String
+  q6: String
+  q7: String
+  q8: String
+  q9: String
+  q10: String
+  q11: String
+  q12: String
+  q13: String
+  q14: String
+  q15: String
+  q16: String
+  q17: String
+  q18: String
+  seek_report: Boolean!
+  status: Status!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+  village: Village
+  villageId: Int
+}
+
+type NaApplicant {
+  aadhar: String
+  address: String
+  contact: String
+  createdAt: String!
+  deletedAt: String
+  email: String
+  firstName: String!
+  id: Int!
+  is_main: Boolean!
+  lastName: String!
+  na_form: Na!
+  na_formId: Int!
+  relation: String
+  signature_url: String
+  status: UserStatus!
+  updatedAt: String!
+  village: Village
+  villageId: Int
+}
+
+type NaFee {
+  amount: String!
+  bank_name: String
+  bank_ref_no: String
+  createdAt: DateTime!
+  createdBy: User
+  createdById: Int
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  id: Int!
+  invoice_no: String
+  is_paid: Boolean!
+  na_form: Na!
+  na_formId: Int!
+  order_id: String
+  payment_mode: PaymentMode!
+  payment_type: PaymentType!
+  status: FeesStatus!
+  track_id: String
+  transaction_date: DateTime
+  transaction_id: String
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+}
+
+type NaPagination {
+  data: [Na!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+type NaQuery {
+  createdAt: DateTime!
+  createdBy: User
+  createdById: Int
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  from_user: User!
+  from_userId: Int!
+  id: Int!
+  na_form: Na!
+  na_formId: Int!
+  query: String!
+  query_status: QueryStatus!
+  request_type: RequestType!
+  status: Status!
+  to_user: User!
+  to_userId: Int!
+  type: QueryType!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+  upload_url_1: String
+  upload_url_2: String
+  upload_url_3: String
+  upload_url_4: String
+  upload_url_5: String
+}
+
+type NaSurvey {
+  area: String
+  createdAt: DateTime!
+  createdBy: User
+  createdById: Int
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  id: Int!
+  na_form: Na!
+  na_formId: Int!
+  status: Status!
+  sub_division: String
+  survey_no: String
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+  village: Village!
+  villageId: Int!
+}
+
+type NaUpload {
+  createdAt: DateTime!
+  createdBy: User
+  createdById: Int
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  id: Int!
+  na_form: Na!
+  na_formId: Int!
+  name: String
+  status: Status!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+  upload_url: String
+}
+
+enum PaymentMode {
+  CASH
+  CHALLAN
+  DD
+  ONLINE
+  OTHER
+}
+
+enum PaymentType {
+  FEES
+  OTHER
+  PENALTY
+  REFUND
+  SANAD
+}
+
+type Query {
+  getAllNa(skip: Int!, take: Int!): NaPagination!
+  getAllUser(skip: Int!, take: Int!): UserPagination!
+  getAllVillage: [Village!]!
+  getNaById(id: Int!): Na!
+  getQueryByType(id: Int!, querytype: [QueryType!]!): [NaQuery!]!
+  getUserById(id: Int!): User!
+  getUserByRole(role: Role!): [User!]!
+  getVillageById(id: Int!): Village!
+  loginUser(loginAuthInput: LoginAuthInput!): User!
+  naApplicant(id: Int!): NaApplicant!
+  naFee(id: Int!): NaFee!
+  naFees: [NaFee!]!
+  naSurvey(id: Int!): NaSurvey!
+  naUpload(id: Int!): NaUpload!
+}
+
+enum QueryStatus {
+  CLOSED
+  PENDING
+  REPLIED
+}
+
+enum QueryType {
+  CORESPONDENCE
+  NOTING
+  QUERY
+  REPORT
+  UPDATES
+}
+
+enum RequestType {
+  APPLTODEPT
+  DEPTTOAPPL
+  DEPTTODEPT
+}
+
+enum Role {
+  ADMIN
+  CIRCLEOFFICER
+  COLLECTOR
+  DEPUTYCOLLECTOR
+  DNHPDA
+  LAQ
+  LDCMAMLATDAR
+  LRO
+  MAMLATDAR
+  PATOCOLLECTOR
+  RAK
+  RTSMAMLATDAR
+  SNSSO
+  SUPTDCOLL
+  SURVEYOR
+  SURVEYSETTLEMENT
+  SYSTEM
+  TALATHI
+  USER
+}
+
+"""The status of the user"""
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+input UpdateNaApplicantInput {
+  contact: String
+  firstName: String
+  id: Int!
+  lastName: String
+  relation: String
+  signature_url: String
+}
+
+input UpdateNaFeeInput {
+  amount: String
+  bank_name: String
+  bank_ref_no: String
+  id: Int!
+  invoice_no: String
+  is_paid: Boolean
+  na_formId: Int
+  order_id: String
+  payment_mode: PaymentMode
+  payment_type: PaymentType
+  track_id: String
+  transaction_date: DateTime
+  transaction_id: String
+}
+
+input UpdateNaInput {
+  anx1: String
+  anx2: String
+  anx3: String
+  anx4: String
+  anx5: String
+  applicants: [CreateNaApplicantInput!]
+  deletedById: Int
+  id: Int!
+  q1: Boolean
+  q2: String
+  q3: String
+  q4: String
+  q5: String
+  q6: String
+  q7: String
+  q8: String
+  q9: String
+  q10: String
+  q11: String
+  q12: String
+  q13: String
+  q14: String
+  q15: String
+  q16: String
+  q17: String
+  q18: String
+  status: Status
+  surveys: [CreateNaSurveyInput!]
+  updatedById: Int
+  villageId: Int
+}
+
+input UpdateNaSurveyInput {
+  area: String
+  id: Int!
+  sub_division: String
+  survey_no: String
+  villageId: Int
+}
+
+input UpdateNaUploadInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+type User {
+  alias: String
+  contact: String!
+  contact_two: String
+  firstName: String!
+  id: Int!
+  lastName: String!
+  otp: String
+  password: String
+  role: Role!
+}
+
+type UserPagination {
+  data: [User!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+"""The status of the user"""
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+  INACTIVE
+}
+
+type Village {
+  id: Int!
+  name: String!
+  status: Status!
+}

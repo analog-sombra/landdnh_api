@@ -1,0 +1,32 @@
+import { Resolver, Mutation, Query, Args, Info, Int } from '@nestjs/graphql';
+import { NaQueryService } from './na_query.service';
+import { NaQuery } from './entities/na_query.entity';
+import { CreateNaQueryInput } from './dto/create-na_query.input';
+import { getSelectedFields } from 'src/utils/methods';
+import { GraphQLResolveInfo } from 'graphql';
+import {} from '@nestjs/common';
+import { QueryType } from '@prisma/client';
+
+@Resolver(() => NaQuery)
+export class NaQueryResolver {
+  constructor(private readonly naQueryService: NaQueryService) {}
+
+  @Mutation(() => NaQuery)
+  createNaQuery(
+    @Args('createNaQueryInput') createNaQueryInput: CreateNaQueryInput,
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const fields = getSelectedFields(info);
+    return this.naQueryService.createNaQuery(createNaQueryInput, fields);
+  }
+
+  @Query(() => [NaQuery])
+  getQueryByType(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('querytype', { type: () => [QueryType] }) querytype: [QueryType],
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const fields = getSelectedFields(info);
+    return this.naQueryService.getQueryByType(id, querytype, fields);
+  }
+}
