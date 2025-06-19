@@ -9,7 +9,10 @@ export class NaApplicantResolver {
   constructor(private readonly naApplicantService: NaApplicantService) {}
 
   @Mutation(() => NaApplicant)
-  createNaApplicant(@Args('createNaApplicantInput') createNaApplicantInput: CreateNaApplicantInput) {
+  createNaApplicant(
+    @Args('createNaApplicantInput')
+    createNaApplicantInput: CreateNaApplicantInput,
+  ) {
     return this.naApplicantService.create(createNaApplicantInput);
   }
 
@@ -24,8 +27,14 @@ export class NaApplicantResolver {
   }
 
   @Mutation(() => NaApplicant)
-  updateNaApplicant(@Args('updateNaApplicantInput') updateNaApplicantInput: UpdateNaApplicantInput) {
-    return this.naApplicantService.update(updateNaApplicantInput.id, updateNaApplicantInput);
+  updateNaApplicant(
+    @Args('updateNaApplicantInput')
+    updateNaApplicantInput: UpdateNaApplicantInput,
+  ) {
+    return this.naApplicantService.update(
+      updateNaApplicantInput.id,
+      updateNaApplicantInput,
+    );
   }
 
   @Mutation(() => NaApplicant)

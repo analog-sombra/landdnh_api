@@ -20,17 +20,9 @@ input CreateNaApplicantInput {
 
 input CreateNaFeeInput {
   amount: String!
-  bank_name: String
-  bank_ref_no: String
-  invoice_no: String
-  is_paid: Boolean
+  createdById: Int!
   na_formId: Int!
-  order_id: String
-  payment_mode: PaymentMode!
-  payment_type: PaymentType!
-  track_id: String
-  transaction_date: DateTime
-  transaction_id: String
+  purpose: String
 }
 
 input CreateNaInput {
@@ -82,7 +74,6 @@ input CreateNaSurveyInput {
   area: String!
   sub_division: String!
   survey_no: String!
-  villageId: Int!
 }
 
 input CreateNaUploadInput {
@@ -95,12 +86,36 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+"""The department of the user"""
+enum Department {
+  ADMIN
+  COLLECTOR
+  LAR
+  LRO
+  MAMLATDAR
+  OTHER
+  PATELTALATHI
+  PDA
+  RDC
+  SYSTEM
+  USER
+}
+
 """The status of the fees"""
 enum FeesStatus {
   ACTIVE
   DUE
   INACTIVE
   PAID
+}
+
+"""The status of the form"""
+enum FormStatus {
+  APPROVED
+  DRAFT
+  INPROGRESS
+  REJECTED
+  SUBMITTED
 }
 
 input LoginAuthInput {
@@ -115,14 +130,13 @@ type Mutation {
   createNaQuery(createNaQueryInput: CreateNaQueryInput!): NaQuery!
   createNaSurvey(createNaSurveyInput: CreateNaSurveyInput!): NaSurvey!
   createNaUpload(createNaUploadInput: CreateNaUploadInput!): NaUpload!
+  payNaFee(updateNaFeeInput: UpdateNaFeeInput!): NaFee!
   registerUser(createAuthInput: CreateAuthInput!): User!
   removeNaApplicant(id: Int!): NaApplicant!
-  removeNaFee(id: Int!): NaFee!
   removeNaSurvey(id: Int!): NaSurvey!
   removeNaUpload(id: Int!): NaUpload!
   updateNa(updateNaInput: UpdateNaInput!): Na!
   updateNaApplicant(updateNaApplicantInput: UpdateNaApplicantInput!): NaApplicant!
-  updateNaFee(updateNaFeeInput: UpdateNaFeeInput!): NaFee!
   updateNaSurvey(updateNaSurveyInput: UpdateNaSurveyInput!): NaSurvey!
   updateNaUpload(updateNaUploadInput: UpdateNaUploadInput!): NaUpload!
 }
@@ -139,10 +153,13 @@ type Na {
   deletedAt: DateTime
   deletedBy: User
   deletedById: Int
-  dept_user_id: User!
+  dept_user: User
+  dept_user_id: Int
+  form_status: FormStatus
   id: Int!
   na_applicant: [NaApplicant!]
   na_survey: [NaSurvey!]
+  office_status: Department
   q1: Boolean!
   q2: String
   q3: String
@@ -209,6 +226,7 @@ type NaFee {
   order_id: String
   payment_mode: PaymentMode!
   payment_type: PaymentType!
+  purpose: String
   status: FeesStatus!
   track_id: String
   transaction_date: DateTime
@@ -313,15 +331,16 @@ type Query {
   getAllNa(skip: Int!, take: Int!): NaPagination!
   getAllUser(skip: Int!, take: Int!): UserPagination!
   getAllVillage: [Village!]!
+  getFeesHistory(id: Int!): [NaFee!]!
   getNaById(id: Int!): Na!
+  getPendingNaFee(id: Int!): [NaFee!]!
   getQueryByType(id: Int!, querytype: [QueryType!]!): [NaQuery!]!
   getUserById(id: Int!): User!
   getUserByRole(role: Role!): [User!]!
+  getUserByRoles(role: [Role!]!): [User!]!
   getVillageById(id: Int!): Village!
   loginUser(loginAuthInput: LoginAuthInput!): User!
   naApplicant(id: Int!): NaApplicant!
-  naFee(id: Int!): NaFee!
-  naFees: [NaFee!]!
   naSurvey(id: Int!): NaSurvey!
   naUpload(id: Int!): NaUpload!
 }
@@ -387,6 +406,8 @@ input UpdateNaFeeInput {
   amount: String
   bank_name: String
   bank_ref_no: String
+  createdById: Int
+  deletedById: Int
   id: Int!
   invoice_no: String
   is_paid: Boolean
@@ -394,9 +415,12 @@ input UpdateNaFeeInput {
   order_id: String
   payment_mode: PaymentMode
   payment_type: PaymentType
+  purpose: String
+  status: FeesStatus
   track_id: String
   transaction_date: DateTime
   transaction_id: String
+  updatedById: Int
 }
 
 input UpdateNaInput {
@@ -437,7 +461,6 @@ input UpdateNaSurveyInput {
   id: Int!
   sub_division: String
   survey_no: String
-  villageId: Int
 }
 
 input UpdateNaUploadInput {

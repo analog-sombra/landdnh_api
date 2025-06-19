@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
-import { Status } from '@prisma/client';
+import { Department, FormStatus, Status } from '@prisma/client';
 import { User } from 'src/user/entities/user.entity';
 import { Village } from 'src/village/entities/village.entity';
 import { NaApplicant } from '../na_applicant/entities/na_applicant.entity';
@@ -8,6 +9,14 @@ import { NaSurvey } from '../na_survey/entities/na_survey.entity';
 registerEnumType(Status, {
   name: 'Status',
   description: 'The status of the user',
+});
+registerEnumType(Department, {
+  name: 'Department',
+  description: 'The department of the user',
+});
+registerEnumType(FormStatus, {
+  name: 'FormStatus',
+  description: 'The status of the form',
 });
 
 @ObjectType()
@@ -93,6 +102,12 @@ export class Na {
   @Field(() => Status)
   status: Status;
 
+  @Field(() => Department, { nullable: true })
+  office_status: Department;
+
+  @Field(() => FormStatus, { nullable: true })
+  form_status: FormStatus;
+
   @Field(() => Date)
   createdAt: Date;
 
@@ -126,8 +141,11 @@ export class Na {
   @Field(() => [NaSurvey], { nullable: true })
   na_survey: NaSurvey[];
 
-  @Field(() => User)
-  dept_user_id: User;
+  @Field(() => Int, { nullable: true })
+  dept_user_id: number;
+
+  @Field(() => User, { nullable: true })
+  dept_user: User;
 
   @Field(() => Boolean)
   seek_report: boolean;

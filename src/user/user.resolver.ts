@@ -37,4 +37,13 @@ export class UserResolver {
     const fields = getSelectedFields(info);
     return this.userService.getUserByRole(role, fields);
   }
+
+  @Query(() => [User])
+  getUserByRoles(
+    @Args('role', { type: () => [Role] }) role: Role[],
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const fields = getSelectedFields(info);
+    return this.userService.getUserByRoles(role, fields);
+  }
 }

@@ -24,7 +24,7 @@ export class NaService {
       if (surveys) {
         const survey_reponse = await this.prisma.na_survey.createMany({
           data: surveys.map((survey) => ({
-            villageId: survey.villageId,
+            villageId: data.villageId,
             area: survey.area,
             sub_division: survey.sub_division,
             survey_no: survey.survey_no,
@@ -126,8 +126,15 @@ export class NaService {
         },
         select: {
           id: true,
-          q2: true,
+          q4: true,
           status: true,
+          office_status: true,
+          form_status: true,
+          dept_user: {
+            select: {
+              role: true,
+            },
+          },
           village: {
             select: {
               id: true,

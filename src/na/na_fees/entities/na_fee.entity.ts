@@ -18,13 +18,6 @@ registerEnumType(PaymentMode, {
   description: 'The status of the fees',
 });
 
-// track_id         String?
-// bank_name        String?
-// bank_ref_no      String?
-// invoice_no       String?
-// order_id         String?
-// is_paid          Boolean     @default(false)
-
 @ObjectType()
 export class NaFee {
   @Field(() => Int)
@@ -65,6 +58,9 @@ export class NaFee {
 
   @Field(() => String, { nullable: true })
   order_id: string;
+
+  @Field(() => String, { nullable: true })
+  purpose: string;
 
   @Field(() => Boolean, { defaultValue: false })
   is_paid: boolean;

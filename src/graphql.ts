@@ -8,11 +8,33 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export enum Department {
+    ADMIN = "ADMIN",
+    COLLECTOR = "COLLECTOR",
+    LAR = "LAR",
+    LRO = "LRO",
+    MAMLATDAR = "MAMLATDAR",
+    OTHER = "OTHER",
+    PATELTALATHI = "PATELTALATHI",
+    PDA = "PDA",
+    RDC = "RDC",
+    SYSTEM = "SYSTEM",
+    USER = "USER"
+}
+
 export enum FeesStatus {
     ACTIVE = "ACTIVE",
     DUE = "DUE",
     INACTIVE = "INACTIVE",
     PAID = "PAID"
+}
+
+export enum FormStatus {
+    APPROVED = "APPROVED",
+    DRAFT = "DRAFT",
+    INPROGRESS = "INPROGRESS",
+    REJECTED = "REJECTED",
+    SUBMITTED = "SUBMITTED"
 }
 
 export enum PaymentMode {
@@ -102,17 +124,9 @@ export interface CreateNaApplicantInput {
 
 export interface CreateNaFeeInput {
     amount: string;
-    bank_name?: Nullable<string>;
-    bank_ref_no?: Nullable<string>;
-    invoice_no?: Nullable<string>;
-    is_paid?: Nullable<boolean>;
+    createdById: number;
     na_formId: number;
-    order_id?: Nullable<string>;
-    payment_mode: PaymentMode;
-    payment_type: PaymentType;
-    track_id?: Nullable<string>;
-    transaction_date?: Nullable<DateTime>;
-    transaction_id?: Nullable<string>;
+    purpose?: Nullable<string>;
 }
 
 export interface CreateNaInput {
@@ -164,7 +178,6 @@ export interface CreateNaSurveyInput {
     area: string;
     sub_division: string;
     survey_no: string;
-    villageId: number;
 }
 
 export interface CreateNaUploadInput {
@@ -189,6 +202,8 @@ export interface UpdateNaFeeInput {
     amount?: Nullable<string>;
     bank_name?: Nullable<string>;
     bank_ref_no?: Nullable<string>;
+    createdById?: Nullable<number>;
+    deletedById?: Nullable<number>;
     id: number;
     invoice_no?: Nullable<string>;
     is_paid?: Nullable<boolean>;
@@ -196,9 +211,12 @@ export interface UpdateNaFeeInput {
     order_id?: Nullable<string>;
     payment_mode?: Nullable<PaymentMode>;
     payment_type?: Nullable<PaymentType>;
+    purpose?: Nullable<string>;
+    status?: Nullable<FeesStatus>;
     track_id?: Nullable<string>;
     transaction_date?: Nullable<DateTime>;
     transaction_id?: Nullable<string>;
+    updatedById?: Nullable<number>;
 }
 
 export interface UpdateNaInput {
@@ -239,7 +257,6 @@ export interface UpdateNaSurveyInput {
     id: number;
     sub_division?: Nullable<string>;
     survey_no?: Nullable<string>;
-    villageId?: Nullable<number>;
 }
 
 export interface UpdateNaUploadInput {
@@ -254,14 +271,13 @@ export interface IMutation {
     createNaQuery(createNaQueryInput: CreateNaQueryInput): NaQuery | Promise<NaQuery>;
     createNaSurvey(createNaSurveyInput: CreateNaSurveyInput): NaSurvey | Promise<NaSurvey>;
     createNaUpload(createNaUploadInput: CreateNaUploadInput): NaUpload | Promise<NaUpload>;
+    payNaFee(updateNaFeeInput: UpdateNaFeeInput): NaFee | Promise<NaFee>;
     registerUser(createAuthInput: CreateAuthInput): User | Promise<User>;
     removeNaApplicant(id: number): NaApplicant | Promise<NaApplicant>;
-    removeNaFee(id: number): NaFee | Promise<NaFee>;
     removeNaSurvey(id: number): NaSurvey | Promise<NaSurvey>;
     removeNaUpload(id: number): NaUpload | Promise<NaUpload>;
     updateNa(updateNaInput: UpdateNaInput): Na | Promise<Na>;
     updateNaApplicant(updateNaApplicantInput: UpdateNaApplicantInput): NaApplicant | Promise<NaApplicant>;
-    updateNaFee(updateNaFeeInput: UpdateNaFeeInput): NaFee | Promise<NaFee>;
     updateNaSurvey(updateNaSurveyInput: UpdateNaSurveyInput): NaSurvey | Promise<NaSurvey>;
     updateNaUpload(updateNaUploadInput: UpdateNaUploadInput): NaUpload | Promise<NaUpload>;
 }
@@ -278,10 +294,13 @@ export interface Na {
     deletedAt?: Nullable<DateTime>;
     deletedBy?: Nullable<User>;
     deletedById?: Nullable<number>;
-    dept_user_id: User;
+    dept_user?: Nullable<User>;
+    dept_user_id?: Nullable<number>;
+    form_status?: Nullable<FormStatus>;
     id: number;
     na_applicant?: Nullable<NaApplicant[]>;
     na_survey?: Nullable<NaSurvey[]>;
+    office_status?: Nullable<Department>;
     q1: boolean;
     q2?: Nullable<string>;
     q3?: Nullable<string>;
@@ -348,6 +367,7 @@ export interface NaFee {
     order_id?: Nullable<string>;
     payment_mode: PaymentMode;
     payment_type: PaymentType;
+    purpose?: Nullable<string>;
     status: FeesStatus;
     track_id?: Nullable<string>;
     transaction_date?: Nullable<DateTime>;
@@ -436,15 +456,16 @@ export interface IQuery {
     getAllNa(skip: number, take: number): NaPagination | Promise<NaPagination>;
     getAllUser(skip: number, take: number): UserPagination | Promise<UserPagination>;
     getAllVillage(): Village[] | Promise<Village[]>;
+    getFeesHistory(id: number): NaFee[] | Promise<NaFee[]>;
     getNaById(id: number): Na | Promise<Na>;
+    getPendingNaFee(id: number): NaFee[] | Promise<NaFee[]>;
     getQueryByType(id: number, querytype: QueryType[]): NaQuery[] | Promise<NaQuery[]>;
     getUserById(id: number): User | Promise<User>;
     getUserByRole(role: Role): User[] | Promise<User[]>;
+    getUserByRoles(role: Role[]): User[] | Promise<User[]>;
     getVillageById(id: number): Village | Promise<Village>;
     loginUser(loginAuthInput: LoginAuthInput): User | Promise<User>;
     naApplicant(id: number): NaApplicant | Promise<NaApplicant>;
-    naFee(id: number): NaFee | Promise<NaFee>;
-    naFees(): NaFee[] | Promise<NaFee[]>;
     naSurvey(id: number): NaSurvey | Promise<NaSurvey>;
     naUpload(id: number): NaUpload | Promise<NaUpload>;
 }

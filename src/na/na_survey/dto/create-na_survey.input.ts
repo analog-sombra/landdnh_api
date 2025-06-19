@@ -1,12 +1,8 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsNumber, IsString } from 'class-validator';
+import { InputType, Field } from '@nestjs/graphql';
+import { IsString } from 'class-validator';
 
 @InputType()
 export class CreateNaSurveyInput {
-  @IsNumber()
-  @Field(() => Int)
-  villageId: number;
-
   @IsString()
   @Field(() => String)
   area: string;

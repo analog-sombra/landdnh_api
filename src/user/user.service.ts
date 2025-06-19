@@ -78,4 +78,26 @@ export class UserService {
       throw new BadRequestException(`error: ${error}`);
     }
   }
+  async getUserByRoles(role: Role[], fields: SelectedFields) {
+    try {
+      const user_response = await this.prisma.user.findMany({
+        where: {
+          status: 'ACTIVE',
+          deletedAt: null,
+          role: {
+            in: role,
+          },
+        },
+        select: fields,
+      });
+
+      if (!fields) {
+        throw new BadRequestException('User Not Found');
+      }
+
+      return user_response;
+    } catch (error) {
+      throw new BadRequestException(`error: ${error}`);
+    }
+  }
 }

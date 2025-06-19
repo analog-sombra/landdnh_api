@@ -139,6 +139,28 @@ enum Status {
   INACTIVE
 }
 
+enum FormStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+  INPROGRESS
+}
+
+enum Department {
+  OTHER
+  USER
+  SYSTEM
+  ADMIN
+  MAMLATDAR
+  LAR
+  LRO
+  PDA
+  PATELTALATHI
+  RDC
+  COLLECTOR
+}
+
 enum QueryStatus {
   PENDING
   REPLIED
@@ -148,50 +170,52 @@ enum QueryStatus {
 // na from section start from here
 
 model na_form {
-  id           Int            @id @default(autoincrement())
-  village      village?       @relation(fields: [villageId], references: [id])
-  villageId    Int?
-  q1           Boolean        @default(true)
-  q2           String?
-  q3           String?
-  anx1         String?
-  anx2         String?
-  anx3         String?
-  anx4         String?
-  anx5         String?
-  q4           String? // full name of applicant
-  q5           String?        @db.MediumText // full address of applicant 
-  q6           String? // occupation of applicant
-  q7           String? // village of land
-  q8           String? // survey number
-  q9           String? // old survey number
-  q10          String? // total area of land
-  q11          String? // area of land to be assessed
-  q12          String? // purpose of na
-  q13          String? // present use of land
-  q14          String? // electric light
-  q15          String? // land under acquisition
-  q16          String? // road
-  q17          String? // proposed road
-  q18          String? // past application
-  dept_user    user           @relation(fields: [dept_user_id], references: [id])
-  dept_user_id Int
-  seek_report  Boolean        @default(false)
-  status       Status         @default(ACTIVE)
-  createdAt    DateTime       @default(now())
-  createdBy    user?          @relation("na_form_create", fields: [createdById], references: [id])
-  createdById  Int?
-  updatedAt    DateTime       @updatedAt
-  updatedBy    user?          @relation("na_form_update", fields: [updatedById], references: [id])
-  updatedById  Int?
-  deletedAt    DateTime?
-  deletedBy    user?          @relation("na_form_delete", fields: [deletedById], references: [id])
-  deletedById  Int?
-  na_fees      na_fees[]
-  na_query     na_query[]
-  na_upload    na_upload[]
-  na_survey    na_survey[]
-  na_applicant na_applicant[]
+  id            Int            @id @default(autoincrement())
+  village       village?       @relation(fields: [villageId], references: [id])
+  villageId     Int?
+  q1            Boolean        @default(true)
+  q2            String?
+  q3            String?
+  anx1          String?
+  anx2          String?
+  anx3          String?
+  anx4          String?
+  anx5          String?
+  q4            String? // full name of applicant
+  q5            String?        @db.MediumText // full address of applicant 
+  q6            String? // occupation of applicant
+  q7            String? // village of land
+  q8            String? // survey number
+  q9            String? // old survey number
+  q10           String? // total area of land
+  q11           String? // area of land to be assessed
+  q12           String? // purpose of na
+  q13           String? // present use of land
+  q14           String? // electric light
+  q15           String? // land under acquisition
+  q16           String? // road
+  q17           String? // proposed road
+  q18           String? // past application
+  dept_user     user           @relation(fields: [dept_user_id], references: [id])
+  dept_user_id  Int
+  office_status Department     @default(MAMLATDAR)
+  form_status   FormStatus     @default(DRAFT)
+  seek_report   Boolean        @default(false)
+  status        Status         @default(ACTIVE)
+  createdAt     DateTime       @default(now())
+  createdBy     user?          @relation("na_form_create", fields: [createdById], references: [id])
+  createdById   Int?
+  updatedAt     DateTime       @updatedAt
+  updatedBy     user?          @relation("na_form_update", fields: [updatedById], references: [id])
+  updatedById   Int?
+  deletedAt     DateTime?
+  deletedBy     user?          @relation("na_form_delete", fields: [deletedById], references: [id])
+  deletedById   Int?
+  na_fees       na_fees[]
+  na_query      na_query[]
+  na_upload     na_upload[]
+  na_survey     na_survey[]
+  na_applicant  na_applicant[]
 }
 
 model na_applicant {
@@ -230,6 +254,7 @@ model na_fees {
   invoice_no       String?
   order_id         String?
   is_paid          Boolean     @default(false)
+  purpose          String?
   status           FeesStatus  @default(ACTIVE)
   createdAt        DateTime    @default(now())
   createdBy        user?       @relation("na_fees_create", fields: [createdById], references: [id])
