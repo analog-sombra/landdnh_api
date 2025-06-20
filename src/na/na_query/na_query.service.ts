@@ -45,7 +45,6 @@ export class NaQueryService {
         },
         select: fields,
       });
-      console.log('na_query_response', na_query_response);
       if (!na_query_response) {
         throw new BadRequestException('Query Not found');
       }
