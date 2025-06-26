@@ -62,8 +62,10 @@ export enum QueryStatus {
 export enum QueryType {
     CORESPONDENCE = "CORESPONDENCE",
     NOTING = "NOTING",
+    PRENOTE = "PRENOTE",
     QUERY = "QUERY",
     REPORT = "REPORT",
+    SUBMITREPORT = "SUBMITREPORT",
     UPDATES = "UPDATES"
 }
 
@@ -81,6 +83,7 @@ export enum Role {
     DNHPDA = "DNHPDA",
     LAQ = "LAQ",
     LDCMAMLATDAR = "LDCMAMLATDAR",
+    LDCSINGLEWINDOW = "LDCSINGLEWINDOW",
     LRO = "LRO",
     MAMLATDAR = "MAMLATDAR",
     PATOCOLLECTOR = "PATOCOLLECTOR",
@@ -136,6 +139,7 @@ export interface CreateNaInput {
     anx4?: Nullable<string>;
     anx5?: Nullable<string>;
     applicants?: Nullable<CreateNaApplicantInput[]>;
+    createdById: number;
     q1: boolean;
     q2?: Nullable<string>;
     q3?: Nullable<string>;
@@ -160,11 +164,13 @@ export interface CreateNaInput {
 
 export interface CreateNaQueryInput {
     createdById: number;
+    dept_update?: Nullable<boolean>;
     from_userId: number;
     na_formId: number;
     query: string;
     query_status: QueryStatus;
     request_type: RequestType;
+    seek_report?: Nullable<boolean>;
     to_userId: number;
     type: QueryType;
     upload_url_1?: Nullable<string>;
@@ -226,6 +232,7 @@ export interface UpdateNaInput {
     anx4?: Nullable<string>;
     anx5?: Nullable<string>;
     applicants?: Nullable<CreateNaApplicantInput[]>;
+    createdById?: Nullable<number>;
     deletedById?: Nullable<number>;
     id: number;
     q1?: Nullable<boolean>;
@@ -276,6 +283,8 @@ export interface IMutation {
     removeNaApplicant(id: number): NaApplicant | Promise<NaApplicant>;
     removeNaSurvey(id: number): NaSurvey | Promise<NaSurvey>;
     removeNaUpload(id: number): NaUpload | Promise<NaUpload>;
+    submitNaById(id: number): Na | Promise<Na>;
+    submitNaQuery(createNaQueryInput: CreateNaQueryInput, id: number): NaQuery | Promise<NaQuery>;
     updateNa(updateNaInput: UpdateNaInput): Na | Promise<Na>;
     updateNaApplicant(updateNaApplicantInput: UpdateNaApplicantInput): NaApplicant | Promise<NaApplicant>;
     updateNaSurvey(updateNaSurveyInput: UpdateNaSurveyInput): NaSurvey | Promise<NaSurvey>;

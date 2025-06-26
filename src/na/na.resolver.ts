@@ -47,4 +47,13 @@ export class NaResolver {
     const fields = getSelectedFields(info);
     return this.naService.updateNa(updateNaInput, fields);
   }
+
+  @Mutation(() => Na)
+  submitNaById(
+    @Args('id', { type: () => Int }) id: number,
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const fields = getSelectedFields(info);
+    return this.naService.submitNaById(id, fields);
+  }
 }

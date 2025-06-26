@@ -29,4 +29,14 @@ export class NaQueryResolver {
     const fields = getSelectedFields(info);
     return this.naQueryService.getQueryByType(id, querytype, fields);
   }
+
+  @Mutation(() => NaQuery)
+  submitNaQuery(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('createNaQueryInput') createNaQueryInput: CreateNaQueryInput,
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const fields = getSelectedFields(info);
+    return this.naQueryService.submitNaQuery(id, createNaQueryInput, fields);
+  }
 }

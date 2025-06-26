@@ -13,7 +13,7 @@ export class NaService {
       const { surveys, applicants, ...data } = createNaInput;
 
       const na_response = await this.prisma.na_form.create({
-        data: { ...data, dept_user_id: 6 },
+        data: { ...data, dept_user_id: 10 },
         select: { id: true, createdById: true, ...fields },
       });
 
@@ -190,6 +190,40 @@ export class NaService {
 
       if (!fields) {
         throw new BadRequestException('Unable to update NA');
+      }
+
+      return na_response;
+    } catch (error) {
+      throw new BadRequestException(`error: ${error}`);
+    }
+  }
+
+  async submitNaById(id: number, fields: SelectedFields) {
+    try {
+      const is_na_exists = await this.prisma.na_form.findFirst({
+        where: {
+          id: id,
+          deletedAt: null,
+          deletedBy: null,
+        },
+      });
+
+      if (!is_na_exists) {
+        throw new BadRequestException('NA Not Found');
+      }
+
+      const na_response = await this.prisma.na_form.update({
+        where: {
+          id: id,
+        },
+        data: {
+          form_status: 'SUBMITTED',
+        },
+        select: fields,
+      });
+
+      if (!na_response) {
+        throw new BadRequestException('Unable to submit NA');
       }
 
       return na_response;

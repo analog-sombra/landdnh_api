@@ -1,5 +1,11 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsArray, IsBoolean, IsNumber, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { CreateNaApplicantInput } from '../na_applicant/dto/create-na_applicant.input';
 import { CreateNaSurveyInput } from '../na_survey/dto/create-na_survey.input';
 
@@ -57,6 +63,7 @@ export class CreateNaInput {
   @Field(() => String, { nullable: true })
   q7: string;
 
+  @IsOptional()
   @IsString()
   @Field(() => String, { nullable: true })
   q8: string;
@@ -108,4 +115,8 @@ export class CreateNaInput {
   @IsArray()
   @Field(() => [CreateNaSurveyInput], { nullable: true })
   surveys: CreateNaSurveyInput[];
+
+  @IsNumber()
+  @Field(() => Int)
+  createdById: number;
 }

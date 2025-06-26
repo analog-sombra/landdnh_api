@@ -76,10 +76,6 @@ export class NaFeesService {
         select: fields,
       });
 
-      if (!fees_history || fees_history.length === 0) {
-        throw new BadRequestException('No fees history found');
-      }
-
       return fees_history;
     } catch (error) {
       throw new BadRequestException(`error: ${error}`);

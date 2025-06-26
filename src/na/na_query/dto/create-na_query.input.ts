@@ -1,6 +1,12 @@
 import { InputType, Int, Field, registerEnumType } from '@nestjs/graphql';
 import { QueryStatus, QueryType, RequestType } from '@prisma/client';
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 registerEnumType(QueryType, {
   name: 'QueryType', // this one is mandatory
@@ -70,4 +76,14 @@ export class CreateNaQueryInput {
   @IsNumber()
   @Field(() => Int)
   createdById: number;
+
+  @IsOptional()
+  @IsBoolean()
+  @Field(() => Boolean, { nullable: true })
+  dept_update: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Field(() => Boolean, { nullable: true })
+  seek_report: boolean;
 }

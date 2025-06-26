@@ -32,6 +32,7 @@ input CreateNaInput {
   anx4: String
   anx5: String
   applicants: [CreateNaApplicantInput!]
+  createdById: Int!
   q1: Boolean!
   q2: String
   q3: String
@@ -56,11 +57,13 @@ input CreateNaInput {
 
 input CreateNaQueryInput {
   createdById: Int!
+  dept_update: Boolean
   from_userId: Int!
   na_formId: Int!
   query: String!
   query_status: QueryStatus!
   request_type: RequestType!
+  seek_report: Boolean
   to_userId: Int!
   type: QueryType!
   upload_url_1: String
@@ -135,6 +138,8 @@ type Mutation {
   removeNaApplicant(id: Int!): NaApplicant!
   removeNaSurvey(id: Int!): NaSurvey!
   removeNaUpload(id: Int!): NaUpload!
+  submitNaById(id: Int!): Na!
+  submitNaQuery(createNaQueryInput: CreateNaQueryInput!, id: Int!): NaQuery!
   updateNa(updateNaInput: UpdateNaInput!): Na!
   updateNaApplicant(updateNaApplicantInput: UpdateNaApplicantInput!): NaApplicant!
   updateNaSurvey(updateNaSurveyInput: UpdateNaSurveyInput!): NaSurvey!
@@ -354,8 +359,10 @@ enum QueryStatus {
 enum QueryType {
   CORESPONDENCE
   NOTING
+  PRENOTE
   QUERY
   REPORT
+  SUBMITREPORT
   UPDATES
 }
 
@@ -373,6 +380,7 @@ enum Role {
   DNHPDA
   LAQ
   LDCMAMLATDAR
+  LDCSINGLEWINDOW
   LRO
   MAMLATDAR
   PATOCOLLECTOR
@@ -430,6 +438,7 @@ input UpdateNaInput {
   anx4: String
   anx5: String
   applicants: [CreateNaApplicantInput!]
+  createdById: Int
   deletedById: Int
   id: Int!
   q1: Boolean

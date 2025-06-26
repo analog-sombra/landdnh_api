@@ -20,6 +20,7 @@ enum Role {
   ADMIN
   SUPTDCOLL
   LDCMAMLATDAR
+  LDCSINGLEWINDOW
   MAMLATDAR
   TALATHI
   CIRCLEOFFICER
@@ -126,6 +127,8 @@ enum QueryType {
   NOTING
   UPDATES
   REPORT
+  SUBMITREPORT
+  PRENOTE
 }
 
 enum RequestType {
@@ -278,7 +281,7 @@ model na_query {
   to_userId    Int
   request_type RequestType @default(DEPTTOAPPL)
   query_status QueryStatus @default(PENDING)
-  query        String
+  query        String      @db.LongText
   upload_url_1 String?
   upload_url_2 String?
   upload_url_3 String?
