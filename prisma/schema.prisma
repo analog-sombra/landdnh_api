@@ -67,6 +67,21 @@ enum PaymentMode {
   OTHER
 }
 
+enum DepartmentStatus {
+  SUBMIT
+  SEEK_REPORT
+  REPORT_VERIFIED
+  NOTING_DRAFT
+  ALLOT_HEARING
+  HEARING_SCHEDULED
+  INTIMATION_DRAFT
+  PAY_FEES
+  FEES_PAID
+  APPLY_SANAD
+  ORDER_GENERATE
+  ORDER_DOWNLOAD
+}
+
 model user {
   id          Int        @id @default(autoincrement())
   firstName   String
@@ -129,6 +144,9 @@ enum QueryType {
   REPORT
   SUBMITREPORT
   PRENOTE
+  HEARING_SCHEDULED
+  RESCHEDULED
+  JIMNI
 }
 
 enum RequestType {
@@ -151,12 +169,11 @@ enum FormStatus {
 }
 
 enum Department {
-  OTHER
   USER
   SYSTEM
   ADMIN
   MAMLATDAR
-  LAR
+  LAQ
   LRO
   PDA
   PATELTALATHI
@@ -173,10 +190,11 @@ enum QueryStatus {
 // na from section start from here
 
 model na_form {
-  id            Int            @id @default(autoincrement())
-  village       village?       @relation(fields: [villageId], references: [id])
+  id            Int              @id @default(autoincrement())
+  village       village?         @relation(fields: [villageId], references: [id])
   villageId     Int?
-  q1            Boolean        @default(true)
+  last_name     String?
+  q1            Boolean          @default(true)
   q2            String?
   q3            String?
   anx1          String?
@@ -185,7 +203,7 @@ model na_form {
   anx4          String?
   anx5          String?
   q4            String? // full name of applicant
-  q5            String?        @db.MediumText // full address of applicant 
+  q5            String?          @db.MediumText // full address of applicant 
   q6            String? // occupation of applicant
   q7            String? // village of land
   q8            String? // survey number
@@ -199,20 +217,21 @@ model na_form {
   q16           String? // road
   q17           String? // proposed road
   q18           String? // past application
-  dept_user     user           @relation(fields: [dept_user_id], references: [id])
+  dept_user     user             @relation(fields: [dept_user_id], references: [id])
   dept_user_id  Int
-  office_status Department     @default(MAMLATDAR)
-  form_status   FormStatus     @default(DRAFT)
-  seek_report   Boolean        @default(false)
-  status        Status         @default(ACTIVE)
-  createdAt     DateTime       @default(now())
-  createdBy     user?          @relation("na_form_create", fields: [createdById], references: [id])
+  office_status Department       @default(MAMLATDAR)
+  form_status   FormStatus       @default(DRAFT)
+  dept_status   DepartmentStatus @default(SUBMIT)
+  seek_report   Boolean          @default(false)
+  status        Status           @default(ACTIVE)
+  createdAt     DateTime         @default(now())
+  createdBy     user?            @relation("na_form_create", fields: [createdById], references: [id])
   createdById   Int?
-  updatedAt     DateTime       @updatedAt
-  updatedBy     user?          @relation("na_form_update", fields: [updatedById], references: [id])
+  updatedAt     DateTime         @updatedAt
+  updatedBy     user?            @relation("na_form_update", fields: [updatedById], references: [id])
   updatedById   Int?
   deletedAt     DateTime?
-  deletedBy     user?          @relation("na_form_delete", fields: [deletedById], references: [id])
+  deletedBy     user?            @relation("na_form_delete", fields: [deletedById], references: [id])
   deletedById   Int?
   na_fees       na_fees[]
   na_query      na_query[]

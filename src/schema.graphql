@@ -33,6 +33,7 @@ input CreateNaInput {
   anx5: String
   applicants: [CreateNaApplicantInput!]
   createdById: Int!
+  last_name: String
   q1: Boolean!
   q2: String
   q3: String
@@ -56,6 +57,7 @@ input CreateNaInput {
 }
 
 input CreateNaQueryInput {
+  allot_hearing: Boolean
   createdById: Int!
   dept_update: Boolean
   from_userId: Int!
@@ -64,6 +66,7 @@ input CreateNaQueryInput {
   query_status: QueryStatus!
   request_type: RequestType!
   seek_report: Boolean
+  submit_report: Boolean
   to_userId: Int!
   type: QueryType!
   upload_url_1: String
@@ -76,7 +79,7 @@ input CreateNaQueryInput {
 input CreateNaSurveyInput {
   area: String!
   sub_division: String!
-  survey_no: String!
+  survey_no: String
 }
 
 input CreateNaUploadInput {
@@ -93,15 +96,30 @@ scalar DateTime
 enum Department {
   ADMIN
   COLLECTOR
-  LAR
+  LAQ
   LRO
   MAMLATDAR
-  OTHER
   PATELTALATHI
   PDA
   RDC
   SYSTEM
   USER
+}
+
+"""The status of the department"""
+enum DepartmentStatus {
+  ALLOT_HEARING
+  APPLY_SANAD
+  FEES_PAID
+  HEARING_SCHEDULED
+  INTIMATION_DRAFT
+  NOTING_DRAFT
+  ORDER_DOWNLOAD
+  ORDER_GENERATE
+  PAY_FEES
+  REPORT_VERIFIED
+  SEEK_REPORT
+  SUBMIT
 }
 
 """The status of the fees"""
@@ -133,6 +151,8 @@ type Mutation {
   createNaQuery(createNaQueryInput: CreateNaQueryInput!): NaQuery!
   createNaSurvey(createNaSurveyInput: CreateNaSurveyInput!): NaSurvey!
   createNaUpload(createNaUploadInput: CreateNaUploadInput!): NaUpload!
+  hearingReScheduleNaQuery(createNaQueryInput: CreateNaQueryInput!): NaQuery!
+  hearingScheduleNaQuery(createNaQueryInput: CreateNaQueryInput!): NaQuery!
   payNaFee(updateNaFeeInput: UpdateNaFeeInput!): NaFee!
   registerUser(createAuthInput: CreateAuthInput!): User!
   removeNaApplicant(id: Int!): NaApplicant!
@@ -158,10 +178,12 @@ type Na {
   deletedAt: DateTime
   deletedBy: User
   deletedById: Int
+  dept_status: DepartmentStatus
   dept_user: User
   dept_user_id: Int
   form_status: FormStatus
   id: Int!
+  last_name: String
   na_applicant: [NaApplicant!]
   na_survey: [NaSurvey!]
   office_status: Department
@@ -333,6 +355,7 @@ enum PaymentType {
 }
 
 type Query {
+  allReportReceived(id: Int!): [NaQuery!]!
   getAllNa(skip: Int!, take: Int!): NaPagination!
   getAllUser(skip: Int!, take: Int!): UserPagination!
   getAllVillage: [Village!]!
@@ -358,10 +381,13 @@ enum QueryStatus {
 
 enum QueryType {
   CORESPONDENCE
+  HEARING_SCHEDULED
+  JIMNI
   NOTING
   PRENOTE
   QUERY
   REPORT
+  RESCHEDULED
   SUBMITREPORT
   UPDATES
 }
@@ -440,7 +466,9 @@ input UpdateNaInput {
   applicants: [CreateNaApplicantInput!]
   createdById: Int
   deletedById: Int
+  dept_status: DepartmentStatus
   id: Int!
+  last_name: String
   q1: Boolean
   q2: String
   q3: String

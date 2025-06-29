@@ -1,6 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
-import { Department, FormStatus, Status } from '@prisma/client';
+import {
+  Department,
+  DepartmentStatus,
+  FormStatus,
+  Status,
+} from '@prisma/client';
 import { User } from 'src/user/entities/user.entity';
 import { Village } from 'src/village/entities/village.entity';
 import { NaApplicant } from '../na_applicant/entities/na_applicant.entity';
@@ -18,6 +22,10 @@ registerEnumType(FormStatus, {
   name: 'FormStatus',
   description: 'The status of the form',
 });
+registerEnumType(DepartmentStatus, {
+  name: 'DepartmentStatus',
+  description: 'The status of the department',
+});
 
 @ObjectType()
 export class Na {
@@ -29,6 +37,9 @@ export class Na {
 
   @Field(() => Village, { nullable: true })
   village: Village;
+
+  @Field(() => String, { nullable: true })
+  last_name: string;
 
   @Field(() => Boolean)
   q1: boolean;
@@ -104,6 +115,9 @@ export class Na {
 
   @Field(() => Department, { nullable: true })
   office_status: Department;
+
+  @Field(() => DepartmentStatus, { nullable: true })
+  dept_status: DepartmentStatus;
 
   @Field(() => FormStatus, { nullable: true })
   form_status: FormStatus;

@@ -55,10 +55,6 @@ export class NaFeesService {
         select: fields,
       });
 
-      if (!pending_na_fee || pending_na_fee.length === 0) {
-        throw new BadRequestException('No pending fees found');
-      }
-
       return pending_na_fee;
     } catch (error) {
       throw new BadRequestException(`error: ${error}`);

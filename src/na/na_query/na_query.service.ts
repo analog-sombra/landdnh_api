@@ -12,7 +12,8 @@ export class NaQueryService {
     createNaQueryInput: CreateNaQueryInput,
     fields: SelectedFields,
   ) {
-    const { dept_update, seek_report, ...rest } = createNaQueryInput;
+    const { dept_update, seek_report, submit_report, allot_hearing, ...rest } =
+      createNaQueryInput;
     try {
       const na_query_response = await this.prisma.na_query.create({
         data: {
@@ -45,6 +46,36 @@ export class NaQueryService {
           },
           data: {
             seek_report: true,
+            dept_status: 'SEEK_REPORT',
+          },
+        });
+
+        if (!update_response) {
+          throw new BadRequestException('Form Not updated');
+        }
+      }
+
+      if (submit_report) {
+        const update_response = await this.prisma.na_form.update({
+          where: {
+            id: createNaQueryInput.na_formId,
+          },
+          data: {
+            dept_status: 'REPORT_VERIFIED',
+          },
+        });
+
+        if (!update_response) {
+          throw new BadRequestException('Form Not updated');
+        }
+      }
+      if (allot_hearing) {
+        const update_response = await this.prisma.na_form.update({
+          where: {
+            id: createNaQueryInput.na_formId,
+          },
+          data: {
+            dept_status: 'ALLOT_HEARING',
           },
         });
 
@@ -122,6 +153,135 @@ export class NaQueryService {
       if (!na_query_response) {
         throw new BadRequestException('Query Not created');
       }
+      return na_query_response;
+    } catch (error) {
+      throw new BadRequestException(`error: ${error}`);
+    }
+  }
+
+  async allReportReceived(id: number, fields: SelectedFields) {
+    try {
+      const all_seek_report_response = await this.prisma.na_query.findMany({
+        where: {
+          na_formId: id,
+          type: QueryType.REPORT,
+          deletedAt: null,
+          deletedBy: null,
+          status: 'ACTIVE',
+        },
+        select: fields,
+      });
+      if (!all_seek_report_response) {
+        throw new BadRequestException('No Reports Found');
+      }
+
+      const all_submit_report_response = await this.prisma.na_query.findMany({
+        where: {
+          na_formId: id,
+          type: QueryType.SUBMITREPORT,
+          deletedAt: null,
+          deletedBy: null,
+          status: 'ACTIVE',
+        },
+        select: fields,
+      });
+
+      if (
+        all_seek_report_response.length !== all_submit_report_response.length
+      ) {
+        throw new BadRequestException('Not all reports have been submitted');
+      }
+
+      return [...all_seek_report_response, ...all_submit_report_response];
+    } catch (error) {
+      throw new BadRequestException(`error: ${error}`);
+    }
+  }
+
+  async hearingScheduleNaQuery(
+    createNaQueryInput: CreateNaQueryInput,
+    fields: SelectedFields,
+  ) {
+    const { dept_update, ...rest } = createNaQueryInput;
+    try {
+      const na_query_response = await this.prisma.na_query.create({
+        data: {
+          ...rest,
+        },
+        select: fields,
+      });
+      if (!na_query_response) {
+        throw new BadRequestException('Query Not created');
+      }
+
+      const noting_query_response = await this.prisma.na_query.create({
+        data: {
+          query: `The Hon'ble Collector has scheduled a hearing for the case on ${createNaQueryInput.query}. Prepare the Hearing Notice and send it to the concerned parties.`,
+          from_userId: createNaQueryInput.from_userId,
+          to_userId: createNaQueryInput.to_userId,
+          na_formId: createNaQueryInput.na_formId,
+          type: QueryType.CORESPONDENCE,
+          createdById: createNaQueryInput.createdById,
+          request_type: 'DEPTTODEPT',
+          query_status: 'PENDING',
+        },
+        select: fields,
+      });
+      if (!noting_query_response) {
+        throw new BadRequestException('Query Not created');
+      }
+
+      if (dept_update) {
+        const update_response = await this.prisma.na_form.update({
+          where: {
+            id: createNaQueryInput.na_formId,
+          },
+          data: {
+            dept_user_id: createNaQueryInput.to_userId,
+          },
+        });
+
+        if (!update_response) {
+          throw new BadRequestException('Form Not updated');
+        }
+      }
+
+      return na_query_response;
+    } catch (error) {
+      throw new BadRequestException(`error: ${error}`);
+    }
+  }
+  async hearingReScheduleNaQuery(
+    createNaQueryInput: CreateNaQueryInput,
+    fields: SelectedFields,
+  ) {
+    const { dept_update, ...rest } = createNaQueryInput;
+    try {
+      const na_query_response = await this.prisma.na_query.create({
+        data: {
+          ...rest,
+        },
+        select: fields,
+      });
+      if (!na_query_response) {
+        throw new BadRequestException('Query Not created');
+      }
+
+      if (dept_update) {
+        const update_response = await this.prisma.na_form.update({
+          where: {
+            id: createNaQueryInput.na_formId,
+          },
+          data: {
+            dept_user_id: createNaQueryInput.to_userId,
+          },
+        });
+
+        if (!update_response) {
+          throw new BadRequestException('Form Not updated');
+        }
+      }
+
       return na_query_response;
     } catch (error) {
       throw new BadRequestException(`error: ${error}`);

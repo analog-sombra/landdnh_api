@@ -15,6 +15,10 @@ export class CreateNaInput {
   @Field(() => Int)
   villageId: number;
 
+  @IsString()
+  @Field(() => String, { nullable: true })
+  last_name: string;
+
   @IsBoolean()
   @Field(() => Boolean)
   q1: boolean;

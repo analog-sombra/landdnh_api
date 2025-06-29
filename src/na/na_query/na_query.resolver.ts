@@ -39,4 +39,37 @@ export class NaQueryResolver {
     const fields = getSelectedFields(info);
     return this.naQueryService.submitNaQuery(id, createNaQueryInput, fields);
   }
+
+  @Query(() => [NaQuery])
+  allReportReceived(
+    @Args('id', { type: () => Int }) id: number,
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const fields = getSelectedFields(info);
+    return this.naQueryService.allReportReceived(id, fields);
+  }
+
+  @Mutation(() => NaQuery)
+  hearingScheduleNaQuery(
+    @Args('createNaQueryInput') createNaQueryInput: CreateNaQueryInput,
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const fields = getSelectedFields(info);
+    return this.naQueryService.hearingScheduleNaQuery(
+      createNaQueryInput,
+      fields,
+    );
+  }
+
+  @Mutation(() => NaQuery)
+  hearingReScheduleNaQuery(
+    @Args('createNaQueryInput') createNaQueryInput: CreateNaQueryInput,
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const fields = getSelectedFields(info);
+    return this.naQueryService.hearingReScheduleNaQuery(
+      createNaQueryInput,
+      fields,
+    );
+  }
 }

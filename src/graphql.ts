@@ -11,15 +11,29 @@
 export enum Department {
     ADMIN = "ADMIN",
     COLLECTOR = "COLLECTOR",
-    LAR = "LAR",
+    LAQ = "LAQ",
     LRO = "LRO",
     MAMLATDAR = "MAMLATDAR",
-    OTHER = "OTHER",
     PATELTALATHI = "PATELTALATHI",
     PDA = "PDA",
     RDC = "RDC",
     SYSTEM = "SYSTEM",
     USER = "USER"
+}
+
+export enum DepartmentStatus {
+    ALLOT_HEARING = "ALLOT_HEARING",
+    APPLY_SANAD = "APPLY_SANAD",
+    FEES_PAID = "FEES_PAID",
+    HEARING_SCHEDULED = "HEARING_SCHEDULED",
+    INTIMATION_DRAFT = "INTIMATION_DRAFT",
+    NOTING_DRAFT = "NOTING_DRAFT",
+    ORDER_DOWNLOAD = "ORDER_DOWNLOAD",
+    ORDER_GENERATE = "ORDER_GENERATE",
+    PAY_FEES = "PAY_FEES",
+    REPORT_VERIFIED = "REPORT_VERIFIED",
+    SEEK_REPORT = "SEEK_REPORT",
+    SUBMIT = "SUBMIT"
 }
 
 export enum FeesStatus {
@@ -61,10 +75,13 @@ export enum QueryStatus {
 
 export enum QueryType {
     CORESPONDENCE = "CORESPONDENCE",
+    HEARING_SCHEDULED = "HEARING_SCHEDULED",
+    JIMNI = "JIMNI",
     NOTING = "NOTING",
     PRENOTE = "PRENOTE",
     QUERY = "QUERY",
     REPORT = "REPORT",
+    RESCHEDULED = "RESCHEDULED",
     SUBMITREPORT = "SUBMITREPORT",
     UPDATES = "UPDATES"
 }
@@ -140,6 +157,7 @@ export interface CreateNaInput {
     anx5?: Nullable<string>;
     applicants?: Nullable<CreateNaApplicantInput[]>;
     createdById: number;
+    last_name?: Nullable<string>;
     q1: boolean;
     q2?: Nullable<string>;
     q3?: Nullable<string>;
@@ -163,6 +181,7 @@ export interface CreateNaInput {
 }
 
 export interface CreateNaQueryInput {
+    allot_hearing?: Nullable<boolean>;
     createdById: number;
     dept_update?: Nullable<boolean>;
     from_userId: number;
@@ -171,6 +190,7 @@ export interface CreateNaQueryInput {
     query_status: QueryStatus;
     request_type: RequestType;
     seek_report?: Nullable<boolean>;
+    submit_report?: Nullable<boolean>;
     to_userId: number;
     type: QueryType;
     upload_url_1?: Nullable<string>;
@@ -183,7 +203,7 @@ export interface CreateNaQueryInput {
 export interface CreateNaSurveyInput {
     area: string;
     sub_division: string;
-    survey_no: string;
+    survey_no?: Nullable<string>;
 }
 
 export interface CreateNaUploadInput {
@@ -234,7 +254,9 @@ export interface UpdateNaInput {
     applicants?: Nullable<CreateNaApplicantInput[]>;
     createdById?: Nullable<number>;
     deletedById?: Nullable<number>;
+    dept_status?: Nullable<DepartmentStatus>;
     id: number;
+    last_name?: Nullable<string>;
     q1?: Nullable<boolean>;
     q2?: Nullable<string>;
     q3?: Nullable<string>;
@@ -278,6 +300,8 @@ export interface IMutation {
     createNaQuery(createNaQueryInput: CreateNaQueryInput): NaQuery | Promise<NaQuery>;
     createNaSurvey(createNaSurveyInput: CreateNaSurveyInput): NaSurvey | Promise<NaSurvey>;
     createNaUpload(createNaUploadInput: CreateNaUploadInput): NaUpload | Promise<NaUpload>;
+    hearingReScheduleNaQuery(createNaQueryInput: CreateNaQueryInput): NaQuery | Promise<NaQuery>;
+    hearingScheduleNaQuery(createNaQueryInput: CreateNaQueryInput): NaQuery | Promise<NaQuery>;
     payNaFee(updateNaFeeInput: UpdateNaFeeInput): NaFee | Promise<NaFee>;
     registerUser(createAuthInput: CreateAuthInput): User | Promise<User>;
     removeNaApplicant(id: number): NaApplicant | Promise<NaApplicant>;
@@ -303,10 +327,12 @@ export interface Na {
     deletedAt?: Nullable<DateTime>;
     deletedBy?: Nullable<User>;
     deletedById?: Nullable<number>;
+    dept_status?: Nullable<DepartmentStatus>;
     dept_user?: Nullable<User>;
     dept_user_id?: Nullable<number>;
     form_status?: Nullable<FormStatus>;
     id: number;
+    last_name?: Nullable<string>;
     na_applicant?: Nullable<NaApplicant[]>;
     na_survey?: Nullable<NaSurvey[]>;
     office_status?: Nullable<Department>;
@@ -462,6 +488,7 @@ export interface NaUpload {
 }
 
 export interface IQuery {
+    allReportReceived(id: number): NaQuery[] | Promise<NaQuery[]>;
     getAllNa(skip: number, take: number): NaPagination | Promise<NaPagination>;
     getAllUser(skip: number, take: number): UserPagination | Promise<UserPagination>;
     getAllVillage(): Village[] | Promise<Village[]>;

@@ -26,7 +26,10 @@ export class NaService {
           data: surveys.map((survey) => ({
             villageId: data.villageId,
             area: survey.area,
-            sub_division: survey.sub_division,
+            sub_division:
+              survey.sub_division == null
+                ? 'Not Applicable'
+                : survey.sub_division,
             survey_no: survey.survey_no,
             createdById: na_response.createdById,
             na_formId: na_response.id,
@@ -42,7 +45,7 @@ export class NaService {
         data: {
           villageId: data.villageId,
           firstName: data.q4,
-          lastName: '',
+          lastName: data.last_name,
           address: data.q5,
           contact: data.q6,
           relation: 'self',

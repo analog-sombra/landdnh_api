@@ -86,4 +86,14 @@ export class CreateNaQueryInput {
   @IsBoolean()
   @Field(() => Boolean, { nullable: true })
   seek_report: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Field(() => Boolean, { nullable: true })
+  submit_report: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Field(() => Boolean, { nullable: true })
+  allot_hearing: boolean;
 }

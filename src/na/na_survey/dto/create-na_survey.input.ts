@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 @InputType()
 export class CreateNaSurveyInput {
@@ -11,7 +11,8 @@ export class CreateNaSurveyInput {
   @Field(() => String)
   sub_division: string;
 
+  @IsOptional()
   @IsString()
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   survey_no: string;
 }

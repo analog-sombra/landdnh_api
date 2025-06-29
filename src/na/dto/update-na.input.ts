@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { CreateNaInput } from './create-na.input';
 import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
-import { Status } from '@prisma/client';
+import { DepartmentStatus, Status } from '@prisma/client';
 
 @InputType()
 export class UpdateNaInput extends PartialType(CreateNaInput) {
@@ -19,6 +19,11 @@ export class UpdateNaInput extends PartialType(CreateNaInput) {
   @IsNumber()
   @Field(() => Int, { nullable: true })
   villageId: number;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
+  last_name: string;
 
   @IsOptional()
   @IsBoolean()
@@ -133,6 +138,11 @@ export class UpdateNaInput extends PartialType(CreateNaInput) {
   @IsString()
   @Field(() => String, { nullable: true })
   q18: string;
+
+  @IsOptional()
+  @IsEnum(DepartmentStatus)
+  @Field(() => DepartmentStatus, { nullable: true })
+  dept_status: DepartmentStatus;
 
   @IsOptional()
   @IsEnum(Status)
