@@ -121,6 +121,7 @@ export class NaService {
 
   async getAllNa(take: number, skip: number, fields: SelectedFields) {
     try {
+      console.log(fields);
       const na_response = await this.prisma.na_form.findMany({
         where: {
           status: 'ACTIVE',
@@ -133,9 +134,11 @@ export class NaService {
           status: true,
           office_status: true,
           form_status: true,
+          dept_status: true,
           dept_user: {
             select: {
               role: true,
+              id: true,
             },
           },
           village: {
