@@ -12,11 +12,13 @@ export enum Department {
     ADMIN = "ADMIN",
     COLLECTOR = "COLLECTOR",
     LAQ = "LAQ",
+    LDCSINGLEWINDOW = "LDCSINGLEWINDOW",
     LRO = "LRO",
     MAMLATDAR = "MAMLATDAR",
     PATELTALATHI = "PATELTALATHI",
     PDA = "PDA",
     RDC = "RDC",
+    SUPERINTENDENT_COLLECTORATE = "SUPERINTENDENT_COLLECTORATE",
     SYSTEM = "SYSTEM",
     USER = "USER"
 }
@@ -25,6 +27,7 @@ export enum DepartmentStatus {
     ALLOT_HEARING = "ALLOT_HEARING",
     APPLY_SANAD = "APPLY_SANAD",
     FEES_PAID = "FEES_PAID",
+    HEARING = "HEARING",
     HEARING_SCHEDULED = "HEARING_SCHEDULED",
     INTIMATION_DRAFT = "INTIMATION_DRAFT",
     NOTING_DRAFT = "NOTING_DRAFT",
@@ -82,7 +85,9 @@ export enum QueryType {
     QUERY = "QUERY",
     REPORT = "REPORT",
     RESCHEDULED = "RESCHEDULED",
+    SANAD = "SANAD",
     SUBMITREPORT = "SUBMITREPORT",
+    SUBMITREPORTEDITOR = "SUBMITREPORTEDITOR",
     UPDATES = "UPDATES"
 }
 
@@ -185,7 +190,11 @@ export interface CreateNaQueryInput {
     createdById: number;
     dept_update?: Nullable<boolean>;
     from_userId: number;
+    hearing?: Nullable<boolean>;
+    hearing_schedule?: Nullable<boolean>;
+    intimation_draft?: Nullable<boolean>;
     na_formId: number;
+    noting_draft?: Nullable<boolean>;
     query: string;
     query_status: QueryStatus;
     request_type: RequestType;
@@ -294,6 +303,7 @@ export interface UpdateNaUploadInput {
 }
 
 export interface IMutation {
+    approveReport(naid: number): Na | Promise<Na>;
     createNa(createNaInput: CreateNaInput): Na | Promise<Na>;
     createNaApplicant(createNaApplicantInput: CreateNaApplicantInput): NaApplicant | Promise<NaApplicant>;
     createNaFee(createNaFeeInput: CreateNaFeeInput): NaFee | Promise<NaFee>;
@@ -309,6 +319,7 @@ export interface IMutation {
     removeNaUpload(id: number): NaUpload | Promise<NaUpload>;
     submitNaById(id: number): Na | Promise<Na>;
     submitNaQuery(createNaQueryInput: CreateNaQueryInput, id: number): NaQuery | Promise<NaQuery>;
+    submitSeekReport(naid: number, userid: number): Na | Promise<Na>;
     updateNa(updateNaInput: UpdateNaInput): Na | Promise<Na>;
     updateNaApplicant(updateNaApplicantInput: UpdateNaApplicantInput): NaApplicant | Promise<NaApplicant>;
     updateNaSurvey(updateNaSurveyInput: UpdateNaSurveyInput): NaSurvey | Promise<NaSurvey>;

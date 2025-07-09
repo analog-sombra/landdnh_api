@@ -21,26 +21,6 @@ export class NaService {
         throw new BadRequestException('Unable to create NA');
       }
 
-      if (surveys) {
-        const survey_reponse = await this.prisma.na_survey.createMany({
-          data: surveys.map((survey) => ({
-            villageId: data.villageId,
-            area: survey.area,
-            sub_division:
-              survey.sub_division == null
-                ? 'Not Applicable'
-                : survey.sub_division,
-            survey_no: survey.survey_no,
-            createdById: na_response.createdById,
-            na_formId: na_response.id,
-          })),
-        });
-
-        if (!survey_reponse) {
-          throw new BadRequestException('Unable to create NA Survey');
-        }
-      }
-
       const main_applicant = await this.prisma.na_applicant.create({
         data: {
           villageId: data.villageId,
@@ -71,6 +51,26 @@ export class NaService {
 
       if (!main_applicant) {
         throw new BadRequestException('Unable to create NA Applicant');
+      }
+
+      if (surveys) {
+        const survey_reponse = await this.prisma.na_survey.createMany({
+          data: surveys.map((survey) => ({
+            villageId: data.villageId,
+            area: survey.area,
+            sub_division:
+              survey.sub_division == null
+                ? 'Not Applicable'
+                : survey.sub_division,
+            survey_no: survey.survey_no,
+            createdById: na_response.createdById,
+            na_formId: na_response.id,
+          })),
+        });
+
+        if (!survey_reponse) {
+          throw new BadRequestException('Unable to create NA Survey');
+        }
       }
 
       if (applicants) {
@@ -121,7 +121,6 @@ export class NaService {
 
   async getAllNa(take: number, skip: number, fields: SelectedFields) {
     try {
-      console.log(fields);
       const na_response = await this.prisma.na_form.findMany({
         where: {
           status: 'ACTIVE',

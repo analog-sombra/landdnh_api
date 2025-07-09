@@ -61,7 +61,11 @@ input CreateNaQueryInput {
   createdById: Int!
   dept_update: Boolean
   from_userId: Int!
+  hearing: Boolean
+  hearing_schedule: Boolean
+  intimation_draft: Boolean
   na_formId: Int!
+  noting_draft: Boolean
   query: String!
   query_status: QueryStatus!
   request_type: RequestType!
@@ -97,11 +101,13 @@ enum Department {
   ADMIN
   COLLECTOR
   LAQ
+  LDCSINGLEWINDOW
   LRO
   MAMLATDAR
   PATELTALATHI
   PDA
   RDC
+  SUPERINTENDENT_COLLECTORATE
   SYSTEM
   USER
 }
@@ -111,6 +117,7 @@ enum DepartmentStatus {
   ALLOT_HEARING
   APPLY_SANAD
   FEES_PAID
+  HEARING
   HEARING_SCHEDULED
   INTIMATION_DRAFT
   NOTING_DRAFT
@@ -145,6 +152,7 @@ input LoginAuthInput {
 }
 
 type Mutation {
+  approveReport(naid: Int!): Na!
   createNa(createNaInput: CreateNaInput!): Na!
   createNaApplicant(createNaApplicantInput: CreateNaApplicantInput!): NaApplicant!
   createNaFee(createNaFeeInput: CreateNaFeeInput!): NaFee!
@@ -160,6 +168,7 @@ type Mutation {
   removeNaUpload(id: Int!): NaUpload!
   submitNaById(id: Int!): Na!
   submitNaQuery(createNaQueryInput: CreateNaQueryInput!, id: Int!): NaQuery!
+  submitSeekReport(naid: Int!, userid: Int!): Na!
   updateNa(updateNaInput: UpdateNaInput!): Na!
   updateNaApplicant(updateNaApplicantInput: UpdateNaApplicantInput!): NaApplicant!
   updateNaSurvey(updateNaSurveyInput: UpdateNaSurveyInput!): NaSurvey!
@@ -388,7 +397,9 @@ enum QueryType {
   QUERY
   REPORT
   RESCHEDULED
+  SANAD
   SUBMITREPORT
+  SUBMITREPORTEDITOR
   UPDATES
 }
 

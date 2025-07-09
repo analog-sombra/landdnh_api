@@ -95,5 +95,25 @@ export class CreateNaQueryInput {
   @IsOptional()
   @IsBoolean()
   @Field(() => Boolean, { nullable: true })
+  noting_draft: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Field(() => Boolean, { nullable: true })
   allot_hearing: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Field(() => Boolean, { nullable: true })
+  hearing_schedule: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Field(() => Boolean, { nullable: true })
+  hearing: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Field(() => Boolean, { nullable: true })
+  intimation_draft: boolean;
 }

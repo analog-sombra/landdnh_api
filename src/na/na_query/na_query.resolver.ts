@@ -6,6 +6,7 @@ import { getSelectedFields } from 'src/utils/methods';
 import { GraphQLResolveInfo } from 'graphql';
 import {} from '@nestjs/common';
 import { QueryType } from '@prisma/client';
+import { Na } from '../entities/na.entity';
 
 @Resolver(() => NaQuery)
 export class NaQueryResolver {
@@ -71,5 +72,18 @@ export class NaQueryResolver {
       createNaQueryInput,
       fields,
     );
+  }
+
+  @Mutation(() => Na)
+  submitSeekReport(
+    @Args('naid', { type: () => Int }) naid: number,
+    @Args('userid', { type: () => Int }) userid: number,
+  ) {
+    return this.naQueryService.submitSeekReport(naid, userid);
+  }
+
+  @Mutation(() => Na)
+  approveReport(@Args('naid', { type: () => Int }) naid: number) {
+    return this.naQueryService.approveReport(naid);
   }
 }

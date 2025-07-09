@@ -74,6 +74,7 @@ enum DepartmentStatus {
   NOTING_DRAFT
   ALLOT_HEARING
   HEARING_SCHEDULED
+  HEARING
   INTIMATION_DRAFT
   PAY_FEES
   FEES_PAID
@@ -143,10 +144,12 @@ enum QueryType {
   UPDATES
   REPORT
   SUBMITREPORT
+  SUBMITREPORTEDITOR
   PRENOTE
   HEARING_SCHEDULED
   RESCHEDULED
   JIMNI
+  SANAD
 }
 
 enum RequestType {
@@ -179,6 +182,8 @@ enum Department {
   PATELTALATHI
   RDC
   COLLECTOR
+  LDCSINGLEWINDOW
+  SUPERINTENDENT_COLLECTORATE
 }
 
 enum QueryStatus {
@@ -219,7 +224,7 @@ model na_form {
   q18           String? // past application
   dept_user     user             @relation(fields: [dept_user_id], references: [id])
   dept_user_id  Int
-  office_status Department       @default(MAMLATDAR)
+  office_status Department       @default(LDCSINGLEWINDOW)
   form_status   FormStatus       @default(DRAFT)
   dept_status   DepartmentStatus @default(SUBMIT)
   seek_report   Boolean          @default(false)
