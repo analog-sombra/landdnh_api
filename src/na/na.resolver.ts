@@ -30,6 +30,17 @@ export class NaResolver {
   }
 
   @Query(() => NaPagination)
+  getAllUserNa(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('take', { type: () => Int }) take: number,
+    @Args('skip', { type: () => Int }) skip: number,
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const fields = getSelectedFields(info);
+    return this.naService.getAllUserNa(id, take, skip, fields);
+  }
+
+  @Query(() => NaPagination)
   getAllNa(
     @Args('take', { type: () => Int }) take: number,
     @Args('skip', { type: () => Int }) skip: number,
@@ -37,6 +48,26 @@ export class NaResolver {
   ) {
     const fields = getSelectedFields(info);
     return this.naService.getAllNa(take, skip, fields);
+  }
+
+  @Query(() => NaPagination)
+  getAllDepartmentNa(
+    @Args('all', { type: () => Boolean }) all: boolean,
+    @Args('userid', { type: () => Int }) userId: number,
+    @Args('role', { type: () => String }) role: string,
+    @Args('take', { type: () => Int }) take: number,
+    @Args('skip', { type: () => Int }) skip: number,
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const fields = getSelectedFields(info);
+    return this.naService.getAllDepartmentNa(
+      all,
+      userId,
+      role,
+      take,
+      skip,
+      fields,
+    );
   }
 
   @Mutation(() => Na)

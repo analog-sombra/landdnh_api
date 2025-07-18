@@ -10,6 +10,11 @@ input CreateAuthInput {
   role: Role
 }
 
+input CreateDashboardInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 input CreateNaApplicantInput {
   contact: String
   firstName: String!
@@ -58,6 +63,7 @@ input CreateNaInput {
 
 input CreateNaQueryInput {
   allot_hearing: Boolean
+  apply_sanad: Boolean
   createdById: Int!
   dept_update: Boolean
   from_userId: Int!
@@ -87,6 +93,11 @@ input CreateNaSurveyInput {
 }
 
 input CreateNaUploadInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Dashboard {
   """Example field (placeholder)"""
   exampleField: Int!
 }
@@ -153,6 +164,7 @@ input LoginAuthInput {
 
 type Mutation {
   approveReport(naid: Int!): Na!
+  createDashboard(createDashboardInput: CreateDashboardInput!): Dashboard!
   createNa(createNaInput: CreateNaInput!): Na!
   createNaApplicant(createNaApplicantInput: CreateNaApplicantInput!): NaApplicant!
   createNaFee(createNaFeeInput: CreateNaFeeInput!): NaFee!
@@ -163,12 +175,14 @@ type Mutation {
   hearingScheduleNaQuery(createNaQueryInput: CreateNaQueryInput!): NaQuery!
   payNaFee(updateNaFeeInput: UpdateNaFeeInput!): NaFee!
   registerUser(createAuthInput: CreateAuthInput!): User!
+  removeDashboard(id: Int!): Dashboard!
   removeNaApplicant(id: Int!): NaApplicant!
   removeNaSurvey(id: Int!): NaSurvey!
   removeNaUpload(id: Int!): NaUpload!
   submitNaById(id: Int!): Na!
   submitNaQuery(createNaQueryInput: CreateNaQueryInput!, id: Int!): NaQuery!
   submitSeekReport(naid: Int!, userid: Int!): Na!
+  updateDashboard(updateDashboardInput: UpdateDashboardInput!): Dashboard!
   updateNa(updateNaInput: UpdateNaInput!): Na!
   updateNaApplicant(updateNaApplicantInput: UpdateNaApplicantInput!): NaApplicant!
   updateNaSurvey(updateNaSurveyInput: UpdateNaSurveyInput!): NaSurvey!
@@ -365,8 +379,11 @@ enum PaymentType {
 
 type Query {
   allReportReceived(id: Int!): [NaQuery!]!
+  dashboard(id: Int!): Dashboard!
+  getAllDepartmentNa(all: Boolean!, role: String!, skip: Int!, take: Int!, userid: Int!): NaPagination!
   getAllNa(skip: Int!, take: Int!): NaPagination!
   getAllUser(skip: Int!, take: Int!): UserPagination!
+  getAllUserNa(id: Int!, skip: Int!, take: Int!): NaPagination!
   getAllVillage: [Village!]!
   getFeesHistory(id: Int!): [NaFee!]!
   getNaById(id: Int!): Na!
@@ -436,6 +453,12 @@ enum Role {
 enum Status {
   ACTIVE
   INACTIVE
+}
+
+input UpdateDashboardInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 input UpdateNaApplicantInput {

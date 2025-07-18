@@ -12,6 +12,7 @@ import { PrismaModule } from 'prisma/prisma.module';
 import { NaModule } from './na/na.module';
 import { VillageModule } from './village/village.module';
 import { UploaderModule } from './uploader/uploader.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { UploaderModule } from './uploader/uploader.module';
     NaModule,
     VillageModule,
     UploaderModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

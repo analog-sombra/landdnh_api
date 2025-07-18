@@ -116,4 +116,9 @@ export class CreateNaQueryInput {
   @IsBoolean()
   @Field(() => Boolean, { nullable: true })
   intimation_draft: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Field(() => Boolean, { nullable: true })
+  apply_sanad: boolean;
 }

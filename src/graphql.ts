@@ -139,6 +139,10 @@ export interface CreateAuthInput {
     role?: Nullable<Role>;
 }
 
+export interface CreateDashboardInput {
+    exampleField: number;
+}
+
 export interface CreateNaApplicantInput {
     contact?: Nullable<string>;
     firstName: string;
@@ -187,6 +191,7 @@ export interface CreateNaInput {
 
 export interface CreateNaQueryInput {
     allot_hearing?: Nullable<boolean>;
+    apply_sanad?: Nullable<boolean>;
     createdById: number;
     dept_update?: Nullable<boolean>;
     from_userId: number;
@@ -222,6 +227,11 @@ export interface CreateNaUploadInput {
 export interface LoginAuthInput {
     contact: string;
     password: string;
+}
+
+export interface UpdateDashboardInput {
+    exampleField?: Nullable<number>;
+    id: number;
 }
 
 export interface UpdateNaApplicantInput {
@@ -302,8 +312,13 @@ export interface UpdateNaUploadInput {
     id: number;
 }
 
+export interface Dashboard {
+    exampleField: number;
+}
+
 export interface IMutation {
     approveReport(naid: number): Na | Promise<Na>;
+    createDashboard(createDashboardInput: CreateDashboardInput): Dashboard | Promise<Dashboard>;
     createNa(createNaInput: CreateNaInput): Na | Promise<Na>;
     createNaApplicant(createNaApplicantInput: CreateNaApplicantInput): NaApplicant | Promise<NaApplicant>;
     createNaFee(createNaFeeInput: CreateNaFeeInput): NaFee | Promise<NaFee>;
@@ -314,12 +329,14 @@ export interface IMutation {
     hearingScheduleNaQuery(createNaQueryInput: CreateNaQueryInput): NaQuery | Promise<NaQuery>;
     payNaFee(updateNaFeeInput: UpdateNaFeeInput): NaFee | Promise<NaFee>;
     registerUser(createAuthInput: CreateAuthInput): User | Promise<User>;
+    removeDashboard(id: number): Dashboard | Promise<Dashboard>;
     removeNaApplicant(id: number): NaApplicant | Promise<NaApplicant>;
     removeNaSurvey(id: number): NaSurvey | Promise<NaSurvey>;
     removeNaUpload(id: number): NaUpload | Promise<NaUpload>;
     submitNaById(id: number): Na | Promise<Na>;
     submitNaQuery(createNaQueryInput: CreateNaQueryInput, id: number): NaQuery | Promise<NaQuery>;
     submitSeekReport(naid: number, userid: number): Na | Promise<Na>;
+    updateDashboard(updateDashboardInput: UpdateDashboardInput): Dashboard | Promise<Dashboard>;
     updateNa(updateNaInput: UpdateNaInput): Na | Promise<Na>;
     updateNaApplicant(updateNaApplicantInput: UpdateNaApplicantInput): NaApplicant | Promise<NaApplicant>;
     updateNaSurvey(updateNaSurveyInput: UpdateNaSurveyInput): NaSurvey | Promise<NaSurvey>;
@@ -500,8 +517,11 @@ export interface NaUpload {
 
 export interface IQuery {
     allReportReceived(id: number): NaQuery[] | Promise<NaQuery[]>;
+    dashboard(id: number): Dashboard | Promise<Dashboard>;
+    getAllDepartmentNa(all: boolean, role: string, skip: number, take: number, userid: number): NaPagination | Promise<NaPagination>;
     getAllNa(skip: number, take: number): NaPagination | Promise<NaPagination>;
     getAllUser(skip: number, take: number): UserPagination | Promise<UserPagination>;
+    getAllUserNa(id: number, skip: number, take: number): NaPagination | Promise<NaPagination>;
     getAllVillage(): Village[] | Promise<Village[]>;
     getFeesHistory(id: number): NaFee[] | Promise<NaFee[]>;
     getNaById(id: number): Na | Promise<Na>;
