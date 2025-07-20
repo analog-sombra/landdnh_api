@@ -152,6 +152,9 @@ export class NaService {
           deletedAt: null,
           deletedBy: null,
         },
+        orderBy: {
+          updatedAt: 'desc',
+        },
         select: fields,
       });
 

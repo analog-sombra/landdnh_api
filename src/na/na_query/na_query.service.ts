@@ -95,7 +95,7 @@ export class NaQueryService {
 
         const dept_query_response = await this.prisma.na_query.create({
           data: {
-            to_userId: 5,
+            to_userId: createNaQueryInput.to_userId,
             from_userId: createNaQueryInput.from_userId,
             request_type: RequestType.DEPTTODEPT,
             createdById: createNaQueryInput.createdById,
@@ -109,7 +109,50 @@ export class NaQueryService {
           throw new BadRequestException('Query Not created');
         }
 
+        const na_update = await this.prisma.na_form.update({
+          where: {
+            id: createNaQueryInput.na_formId,
+          },
+          data: {
+            dept_user_id: 3,
+            form_status: 'HEARING_SCHEDULED',
+          },
+        });
+        if (!na_update) {
+          throw new BadRequestException('Form Not updated');
+        }
+
         return na_query_response;
+      }
+      if (
+        from_user.role == 'COLLECTOR' &&
+        to_user.role == 'PATOCOLLECTOR' &&
+        na_data.dept_status == 'HEARING_SCHEDULED'
+      ) {
+        const na_query_response = await this.prisma.na_query.create({
+          data: {
+            ...rest,
+          },
+          select: fields,
+        });
+        if (!na_query_response) {
+          throw new BadRequestException('Query Not created');
+        }
+
+        const update_response = await this.prisma.na_form.update({
+          where: {
+            id: createNaQueryInput.na_formId,
+          },
+          data: {
+            dept_user_id: createNaQueryInput.to_userId,
+            office_status: 'COLLECTOR',
+            dept_status: 'ALLOT_HEARING',
+          },
+        });
+
+        if (!update_response) {
+          throw new BadRequestException('Form Not updated');
+        }
       } else if (
         from_user.role == 'LDCMAMLATDAR' &&
         to_user.role == 'USER' &&
@@ -366,6 +409,9 @@ export class NaQueryService {
           },
           deletedAt: null,
           deletedBy: null,
+        },
+        orderBy: {
+          updatedAt: 'desc',
         },
         select: fields,
       });
@@ -634,7 +680,7 @@ export class NaQueryService {
           query_status: 'PENDING',
           request_type: 'DEPTTODEPT',
           na_formId: naid,
-          type: 'CORESPONDENCE',
+          type: 'REPORT',
           to_userId: 13,
           query: lroadditionla,
         },

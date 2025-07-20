@@ -169,6 +169,8 @@ enum FormStatus {
   APPROVED
   REJECTED
   INPROGRESS
+  HEARING_SCHEDULED
+  PAY_FEES
 }
 
 enum Department {

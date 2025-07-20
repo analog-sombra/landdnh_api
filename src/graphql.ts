@@ -49,7 +49,9 @@ export enum FeesStatus {
 export enum FormStatus {
     APPROVED = "APPROVED",
     DRAFT = "DRAFT",
+    HEARING_SCHEDULED = "HEARING_SCHEDULED",
     INPROGRESS = "INPROGRESS",
+    PAY_FEES = "PAY_FEES",
     REJECTED = "REJECTED",
     SUBMITTED = "SUBMITTED"
 }

@@ -152,7 +152,9 @@ enum FeesStatus {
 enum FormStatus {
   APPROVED
   DRAFT
+  HEARING_SCHEDULED
   INPROGRESS
+  PAY_FEES
   REJECTED
   SUBMITTED
 }
