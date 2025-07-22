@@ -150,6 +150,8 @@ enum QueryType {
   RESCHEDULED
   JIMNI
   SANAD
+  INTIMATION_DRAFT
+  HEARING_NOTICE
 }
 
 enum RequestType {
