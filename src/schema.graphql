@@ -399,6 +399,7 @@ type Query {
   naApplicant(id: Int!): NaApplicant!
   naSurvey(id: Int!): NaSurvey!
   naUpload(id: Int!): NaUpload!
+  reportReceivedStatus(id: Int!): [NaQuery!]!
 }
 
 enum QueryStatus {

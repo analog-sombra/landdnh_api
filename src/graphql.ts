@@ -539,6 +539,7 @@ export interface IQuery {
     naApplicant(id: number): NaApplicant | Promise<NaApplicant>;
     naSurvey(id: number): NaSurvey | Promise<NaSurvey>;
     naUpload(id: number): NaUpload | Promise<NaUpload>;
+    reportReceivedStatus(id: number): NaQuery[] | Promise<NaQuery[]>;
 }
 
 export interface User {

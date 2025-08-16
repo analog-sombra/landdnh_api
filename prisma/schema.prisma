@@ -125,6 +125,10 @@ model user {
   na_survey_update na_survey[] @relation("na_survey_update")
   na_survey_delete na_survey[] @relation("na_survey_delete")
   na_form          na_form[]
+
+  na_noting_create na_noting[] @relation("na_noting_create")
+  na_noting_update na_noting[] @relation("na_noting_update")
+  na_noting_delete na_noting[] @relation("na_noting_delete")
 }
 
 model village {
@@ -247,6 +251,7 @@ model na_form {
   na_upload     na_upload[]
   na_survey     na_survey[]
   na_applicant  na_applicant[]
+  na_noting     na_noting[]
 }
 
 model na_applicant {
@@ -325,6 +330,22 @@ model na_query {
   deletedAt    DateTime?
   deletedBy    user?       @relation("na_query_delete", fields: [deletedById], references: [id])
   deletedById  Int?
+}
+
+model na_noting {
+  id          Int       @id @default(autoincrement())
+  na_form     na_form   @relation(fields: [na_formId], references: [id])
+  na_formId   Int
+  status      Status    @default(ACTIVE)
+  createdAt   DateTime  @default(now())
+  createdBy   user?     @relation("na_noting_create", fields: [createdById], references: [id])
+  createdById Int?
+  updatedAt   DateTime  @updatedAt
+  updatedBy   user?     @relation("na_noting_update", fields: [updatedById], references: [id])
+  updatedById Int?
+  deletedAt   DateTime?
+  deletedBy   user?     @relation("na_noting_delete", fields: [deletedById], references: [id])
+  deletedById Int?
 }
 
 model na_upload {

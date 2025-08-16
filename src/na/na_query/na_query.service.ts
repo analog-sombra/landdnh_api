@@ -506,6 +506,38 @@ export class NaQueryService {
       throw new BadRequestException(`error: ${error}`);
     }
   }
+  async reportReceivedStatus(id: number, fields: SelectedFields) {
+    try {
+      const all_seek_report_response = await this.prisma.na_query.findMany({
+        where: {
+          na_formId: id,
+          type: QueryType.REPORT,
+          deletedAt: null,
+          deletedBy: null,
+          status: 'ACTIVE',
+        },
+        select: fields,
+      });
+      if (!all_seek_report_response) {
+        throw new BadRequestException('No Reports Found');
+      }
+
+      const all_submit_report_response = await this.prisma.na_query.findMany({
+        where: {
+          na_formId: id,
+          type: QueryType.SUBMITREPORT,
+          deletedAt: null,
+          deletedBy: null,
+          status: 'ACTIVE',
+        },
+        select: fields,
+      });
+
+      return [...all_seek_report_response, ...all_submit_report_response];
+    } catch (error) {
+      throw new BadRequestException(`error: ${error}`);
+    }
+  }
 
   async hearingScheduleNaQuery(
     createNaQueryInput: CreateNaQueryInput,

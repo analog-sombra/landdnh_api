@@ -242,6 +242,7 @@ export class NaService {
           office_status: true,
           form_status: true,
           dept_status: true,
+          updatedAt: true,
           dept_user: {
             select: {
               role: true,
@@ -289,55 +290,136 @@ export class NaService {
     fields: SelectedFields,
   ) {
     try {
-      const na_response = await this.prisma.na_form.findMany({
-        where: {
-          status: 'ACTIVE',
-          deletedAt: null,
-          deletedBy: null,
-          form_status: {
-            not: 'DRAFT',
-          },
-        },
-        select: {
-          id: true,
-          q4: true,
-          status: true,
-          office_status: true,
-          form_status: true,
-          dept_status: true,
-          dept_user: {
-            select: {
-              role: true,
-              id: true,
+      if (all) {
+        const na_response = await this.prisma.na_form.findMany({
+          where: {
+            status: 'ACTIVE',
+            deletedAt: null,
+            deletedBy: null,
+            form_status: {
+              not: 'DRAFT',
             },
           },
-          village: {
-            select: {
-              id: true,
-              name: true,
+          select: {
+            id: true,
+            q4: true,
+            status: true,
+            office_status: true,
+            form_status: true,
+            dept_status: true,
+            dept_user: {
+              select: {
+                role: true,
+                id: true,
+              },
+            },
+            village: {
+              select: {
+                id: true,
+                name: true,
+              },
             },
           },
-        },
-        take: take,
-        skip: skip,
-        orderBy: {
-          updatedAt: 'desc',
-        },
-      });
+          take: take,
+          skip: skip,
+          orderBy: {
+            updatedAt: 'desc',
+          },
+        });
 
-      const total = await this.prisma.na_form.count({
-        where: {
-          status: 'ACTIVE',
-          deletedAt: null,
-          deletedBy: null,
-        },
-      });
+        const total = await this.prisma.na_form.count({
+          where: {
+            status: 'ACTIVE',
+            deletedAt: null,
+            deletedBy: null,
+            form_status: {
+              not: 'DRAFT',
+            },
+          },
+        });
 
-      if (!fields) {
-        throw new BadRequestException('NA Not Found');
+        if (!fields) {
+          throw new BadRequestException('NA Not Found');
+        }
+
+        return { data: na_response, total, skip, take };
+      } else {
+        const allowedRoles: string[] = ['TALATHI', 'DNHPDA', 'LAQ', 'LRO'];
+        const na_response = await this.prisma.na_form.findMany({
+          where: {
+            status: 'ACTIVE',
+            deletedAt: null,
+            deletedBy: null,
+            form_status: {
+              not: 'DRAFT',
+            },
+            OR: [
+              {
+                dept_user: {
+                  id: userId,
+                },
+              },
+              {
+                dept_status: 'SEEK_REPORT',
+                ...(allowedRoles.includes(role) && {}),
+              },
+            ],
+          },
+          select: {
+            id: true,
+            q4: true,
+            status: true,
+            office_status: true,
+            form_status: true,
+            dept_status: true,
+            dept_user: {
+              select: {
+                role: true,
+                id: true,
+              },
+            },
+            village: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+          take: take,
+          skip: skip,
+          orderBy: {
+            updatedAt: 'desc',
+          },
+        });
+
+        const total = await this.prisma.na_form.count({
+          where: {
+            status: 'ACTIVE',
+            deletedAt: null,
+            deletedBy: null,
+            form_status: {
+              not: 'DRAFT',
+            },
+            OR: [
+              {
+                dept_user: {
+                  id: userId,
+                },
+              },
+              {
+                dept_status: 'SEEK_REPORT',
+                ...(allowedRoles.includes(role) && {}),
+              },
+            ],
+          },
+        });
+
+        if (!fields) {
+          throw new BadRequestException('NA Not Found');
+        }
+
+        return { data: na_response, total, skip, take };
       }
-
-      return { data: na_response, total, skip, take };
     } catch (error) {
       throw new BadRequestException(`error: ${error}`);
     }

@@ -50,6 +50,15 @@ export class NaQueryResolver {
     return this.naQueryService.allReportReceived(id, fields);
   }
 
+  @Query(() => [NaQuery])
+  reportReceivedStatus(
+    @Args('id', { type: () => Int }) id: number,
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const fields = getSelectedFields(info);
+    return this.naQueryService.reportReceivedStatus(id, fields);
+  }
+
   @Mutation(() => NaQuery)
   hearingScheduleNaQuery(
     @Args('createNaQueryInput') createNaQueryInput: CreateNaQueryInput,
