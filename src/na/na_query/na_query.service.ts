@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateNaQueryInput } from './dto/create-na_query.input';
 import { SelectedFields } from 'src/utils/methods';
@@ -487,7 +488,20 @@ export class NaQueryService {
       const all_submit_report_response = await this.prisma.na_query.findMany({
         where: {
           na_formId: id,
-          type: QueryType.SUBMITREPORT,
+          OR: [
+            {
+              type: QueryType.SUBMITREPORT,
+            },
+            {
+              type: QueryType.REPORTLAQ,
+            },
+            {
+              type: QueryType.REPORTDNHPDA,
+            },
+            {
+              type: QueryType.REPORTLRO,
+            },
+          ],
           deletedAt: null,
           deletedBy: null,
           status: 'ACTIVE',

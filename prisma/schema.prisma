@@ -156,6 +156,11 @@ enum QueryType {
   SANAD
   INTIMATION_DRAFT
   HEARING_NOTICE
+  REPORTMAM // form1
+  REPORTLRO // form2
+  REPORTLAQ // form3
+  REPORTDNHPDA // form4
+  REPORTFULL // form5
 }
 
 enum RequestType {
