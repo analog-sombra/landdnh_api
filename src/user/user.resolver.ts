@@ -15,7 +15,9 @@ export class UserResolver {
     @Args('id', { type: () => Int }) id: number,
     @Info() info: GraphQLResolveInfo,
   ) {
+    console.log('getUserById called with id:', id);
     const fields = getSelectedFields(info);
+    console.log('Selected fields for getUserById:', fields);
     return this.userService.getUserById(id, fields);
   }
 

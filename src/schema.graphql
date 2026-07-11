@@ -448,6 +448,8 @@ enum Role {
   LRO
   MAMLATDAR
   PATOCOLLECTOR
+  PDA_JE
+  PDA_MS
   RAK
   RTSMAMLATDAR
   SNSSO
@@ -551,15 +553,19 @@ input UpdateNaUploadInput {
 }
 
 type User {
+  aadhar: String
+  address: String
   alias: String
   contact: String!
   contact_two: String
+  email: String
   firstName: String!
   id: Int!
   lastName: String!
   otp: String
   password: String
   role: Role!
+  village: Village
 }
 
 type UserPagination {

@@ -35,6 +35,8 @@ enum Role {
   DNHPDA
   SNSSO
   SURVEYOR
+  PDA_JE
+  PDA_MS
   USER
 }
 
@@ -99,9 +101,10 @@ model user {
   email       String?
   role        Role       @default(USER)
   status      UserStatus @default(ACTIVE)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  deletedAt   DateTime?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   na_form_create na_form[] @relation("na_form_create")
   na_form_update na_form[] @relation("na_form_update")
@@ -129,16 +132,38 @@ model user {
   na_noting_create na_noting[] @relation("na_noting_create")
   na_noting_update na_noting[] @relation("na_noting_update")
   na_noting_delete na_noting[] @relation("na_noting_delete")
+
+  talati         village[] @relation("talati")
+  pda            village[] @relation("pda")
+  mamlatar       village[] @relation("mamlatar")
+  rak            village[] @relation("rak")
+  circle_officer village[] @relation("circle_officer")
+  ldc_mamlatar   village[] @relation("ldc_mamlatar")
+  dy_collector   village[] @relation("dy_collector")
 }
 
 model village {
-  id           Int            @id @default(autoincrement())
-  name         String
-  status       Boolean        @default(true)
-  user         user[]
-  na_applicant na_applicant[]
-  na_form      na_form[]
-  na_survey    na_survey[]
+  id                Int            @id @default(autoincrement())
+  name              String
+  status            Boolean        @default(true)
+  talati_id         Int?
+  talati            user?          @relation("talati", fields: [talati_id], references: [id])
+  pda_id            Int?
+  pda               user?          @relation("pda", fields: [pda_id], references: [id])
+  mamlatar_id       Int?
+  mamlatar          user?          @relation("mamlatar", fields: [mamlatar_id], references: [id])
+  rak_id            Int?
+  rak               user?          @relation("rak", fields: [rak_id], references: [id])
+  circle_officer_id Int?
+  circle_officer    user?          @relation("circle_officer", fields: [circle_officer_id], references: [id])
+  ldc_mamlatar_id   Int?
+  ldc_mamlatar      user?          @relation("ldc_mamlatar", fields: [ldc_mamlatar_id], references: [id])
+  dy_collector_id   Int?
+  dy_collector      user?          @relation("dy_collector", fields: [dy_collector_id], references: [id])
+  user              user[]
+  na_applicant      na_applicant[]
+  na_form           na_form[]
+  na_survey         na_survey[]
 }
 
 enum QueryType {

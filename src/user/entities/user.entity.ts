@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { Role } from '@prisma/client';
+import { Village } from 'src/village/entities/village.entity';
 
 registerEnumType(Role, {
   name: 'Role',
@@ -33,4 +34,16 @@ export class User {
 
   @Field(() => Role)
   role: Role;
+
+  @Field(() => String, { nullable: true })
+  address: string;
+
+  @Field(() => String, { nullable: true })
+  aadhar: string;
+
+  @Field(() => String, { nullable: true })
+  email: string;
+
+  @Field(() => Village, { nullable: true })
+  village: Village;
 }

@@ -118,6 +118,8 @@ export enum Role {
     LRO = "LRO",
     MAMLATDAR = "MAMLATDAR",
     PATOCOLLECTOR = "PATOCOLLECTOR",
+    PDA_JE = "PDA_JE",
+    PDA_MS = "PDA_MS",
     RAK = "RAK",
     RTSMAMLATDAR = "RTSMAMLATDAR",
     SNSSO = "SNSSO",
@@ -548,15 +550,19 @@ export interface IQuery {
 }
 
 export interface User {
+    aadhar?: Nullable<string>;
+    address?: Nullable<string>;
     alias?: Nullable<string>;
     contact: string;
     contact_two?: Nullable<string>;
+    email?: Nullable<string>;
     firstName: string;
     id: number;
     lastName: string;
     otp?: Nullable<string>;
     password?: Nullable<string>;
     role: Role;
+    village?: Nullable<Village>;
 }
 
 export interface UserPagination {
