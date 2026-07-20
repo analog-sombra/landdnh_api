@@ -583,7 +583,14 @@ enum UserStatus {
 }
 
 type Village {
+  circle_officer_id: Int!
+  dy_collector_id: Int!
   id: Int!
+  ldc_mamlatar_id: Int!
+  mamlatar_id: Int!
   name: String!
+  pda_id: Int!
+  rak_id: Int!
   status: Status!
+  talati_id: Int!
 }

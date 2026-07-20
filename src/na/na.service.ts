@@ -253,6 +253,8 @@ export class NaService {
             select: {
               id: true,
               name: true,
+              talati_id: true,
+              pda_id: true,
             },
           },
         },

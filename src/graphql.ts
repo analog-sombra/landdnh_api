@@ -573,9 +573,16 @@ export interface UserPagination {
 }
 
 export interface Village {
+    circle_officer_id: number;
+    dy_collector_id: number;
     id: number;
+    ldc_mamlatar_id: number;
+    mamlatar_id: number;
     name: string;
+    pda_id: number;
+    rak_id: number;
     status: Status;
+    talati_id: number;
 }
 
 export type DateTime = any;
