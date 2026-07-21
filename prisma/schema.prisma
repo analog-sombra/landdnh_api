@@ -186,6 +186,8 @@ enum QueryType {
   REPORTLAQ // form3
   REPORTDNHPDA // form4
   REPORTFULL // form5
+  QUERYDNHPDA
+  COMPLETEPDA
 }
 
 enum RequestType {
